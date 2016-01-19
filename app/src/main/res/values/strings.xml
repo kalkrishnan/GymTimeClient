@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GymTime</string>
+    <string name="action_settings">Settings</string>
+    <string name="view_location_id">location</string>
+    <string name="title_activity_gym_detail">GymDetailActivity</string>
+    <string name="gym_service_url">http://10.0.2.2:8080/gymTimeService/searchGyms</string>
+
+</resources>
