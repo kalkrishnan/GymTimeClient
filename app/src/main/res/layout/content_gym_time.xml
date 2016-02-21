@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/colorPrimaryDark"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".GymTimeActivity"
     tools:showIn="@layout/activity_gym_time">
@@ -16,19 +17,25 @@
     <EditText
         android:id="@+id/view_location_id"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="30sp"
         android:ems="10"
+        android:hint="Location"
+        android:textColor="@color/colorAccent"
+        android:textStyle="italic"
         android:inputType="textPostalAddress"
         android:layout_alignBottom="@+id/button"
         android:layout_toLeftOf="@+id/button"
-        android:layout_toStartOf="@+id/button" />
+        android:layout_toStartOf="@+id/button"
+        android:background="@drawable/edit_text"/>
 
-    <Button
+    <ImageButton
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="OK"
+        android:layout_width="20sp"
+        android:layout_height="20sp"
+        android:text="Search"
+        android:src="@drawable/search"
         android:enabled="false"
+        android:visibility="invisible"
         android:id="@+id/button"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"

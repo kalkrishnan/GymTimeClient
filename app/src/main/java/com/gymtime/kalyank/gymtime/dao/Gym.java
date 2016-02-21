@@ -1,21 +1,26 @@
 package com.gymtime.kalyank.gymtime.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Gym {
 
-    private final String id;
+    private final String latLong;
     private final String name;
     private final String address;
-    private final Traffic traffic;
+    private final List<Traffic> traffic;
 
-    public Gym(String id, String name, String address, Traffic traffic) {
-        this.id = id;
+    public Gym(String latLong, String name, String address, List<Traffic> traffic) {
+
+        this.latLong = latLong;
         this.name = name;
         this.address = address;
-        this.traffic = traffic;
+        this.traffic = new ArrayList<Traffic>();
     }
 
-    public String getId() {
-        return id;
+
+    public String getLatLong() {
+        return latLong;
     }
 
     public String getName() {
@@ -26,7 +31,7 @@ public class Gym {
         return address;
     }
 
-    public Traffic getTraffic() {
+    public List<Traffic> getTraffic() {
         return traffic;
     }
 

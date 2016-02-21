@@ -9,8 +9,8 @@
     tools:context="com.gymtime.kalyank.gymtime.GymDetailActivityFragment"
     tools:showIn="@layout/activity_gym_detail">
 
-    <TextView
-        android:id="@+id/detail_text"
+    <ListView
+        android:id="@+id/gym_detail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

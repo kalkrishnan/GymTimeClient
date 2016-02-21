@@ -14,12 +14,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.gymtime.kalyank.gymtime.dao.Gym;
+import android.widget.ImageButton;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,17 +35,20 @@ public class GymTimeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_time);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final Button okButton = (Button) findViewById(R.id.button);
+        final ImageButton okButton = (ImageButton) findViewById(R.id.button);
         setSupportActionBar(toolbar);
 
         location = (EditText) findViewById(R.id.view_location_id);
         location.addTextChangedListener(new TextWatcher() {
             public void afterTextChanged(Editable s) {
 
-                if (s.length() > getApplicationContext().getResources().getInteger(R.integer.min_location_length))
+                if (s.length() > getApplicationContext().getResources().getInteger(R.integer.min_location_length)) {
                     okButton.setEnabled(true);
-                else
+                    okButton.setVisibility(View.VISIBLE);
+                } else {
                     okButton.setEnabled(false);
+                    okButton.setVisibility(View.INVISIBLE);
+                }
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -66,7 +65,7 @@ public class GymTimeActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 new FetchGymTasks().execute
-                        (new HashMap.SimpleEntry<String, String>("location", location.getText().toString().replace(" ","+")));
+                        (new HashMap.SimpleEntry<String, String>("location", location.getText().toString().replace(" ", "+")));
             }
         });
 
@@ -112,7 +111,7 @@ public class GymTimeActivity extends AppCompatActivity {
             BufferedReader reader = null;
 
             // Will contain the raw JSON response as a string.
-            String forecastJsonStr = null;
+            String gymJsonStr = null;
 
             try {
                 // Construct the URL for the OpenWeatherMap query
@@ -154,8 +153,9 @@ public class GymTimeActivity extends AppCompatActivity {
                     // Stream was empty.  No point in parsing.
                     return null;
                 }
-                forecastJsonStr = buffer.toString();
-                return forecastJsonStr;
+                gymJsonStr = buffer.toString();
+                Log.d(GymTimeActivity.class.getSimpleName(), gymJsonStr);
+                return gymJsonStr;
 
             } catch (IOException e) {
                 Log.e("GymTimeActivity", "Error ", e);
@@ -170,18 +170,13 @@ public class GymTimeActivity extends AppCompatActivity {
                     try {
                         reader.close();
                     } catch (final IOException e) {
-                        Log.e("ForecastFragment", "Error closing stream", e);
+                        Log.e("GymTimeActivity", "Error closing stream", e);
                     }
                 }
             }
 
         }
 
-
-        private Gym getGymFromJson(String gymResultStr) {
-            Gson gson = new GsonBuilder().create();
-            return gson.fromJson(gymResultStr, Gym.class);
-        }
 
         @Override
         protected void onPostExecute(String gymJson) {
