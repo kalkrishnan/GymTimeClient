@@ -3,6 +3,7 @@ package com.gymtime.kalyank.gymtime;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +32,7 @@ public class GymDetailActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_gym_detail, container, false);
-        ;
+
         Bundle extras = this.getActivity().getIntent().getExtras();
         gymAdapter = new GymAdapter(this.getContext(), new ArrayList<Gym>());
         ListView gymView = ((ListView) rootView.findViewById(R.id.gym_detail));
@@ -61,7 +62,7 @@ public class GymDetailActivityFragment extends Fragment {
         String name = gymJson.get("name").toString().replace("\"", "");
         String address = gymJson.get("address").toString().replace("\"", "");
         String latLong = gymJson.get("id").toString().replace("\"", "");
-
+        Log.d(GymTimeActivity.class.getSimpleName(), latLong);
         return new Gym(latLong, name, address, null);
     }
 

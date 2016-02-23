@@ -1,21 +1,19 @@
 package com.gymtime.kalyank.gymtime;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,60 +28,45 @@ public class GymTimeActivity extends AppCompatActivity {
 
     private EditText location;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gym_time);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final ImageButton okButton = (ImageButton) findViewById(R.id.button);
         setSupportActionBar(toolbar);
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) findViewById(R.id.menu_search);
+        searchView.setSearchableInfo(
+                searchManager.getSearchableInfo(getComponentName()));
 
-        location = (EditText) findViewById(R.id.view_location_id);
-        location.addTextChangedListener(new TextWatcher() {
-            public void afterTextChanged(Editable s) {
-
-                if (s.length() > getApplicationContext().getResources().getInteger(R.integer.min_location_length)) {
-                    okButton.setEnabled(true);
-                    okButton.setVisibility(View.VISIBLE);
-                } else {
-                    okButton.setEnabled(false);
-                    okButton.setVisibility(View.INVISIBLE);
-                }
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            public boolean onQueryTextChange(String newText) {
+                // this is your adapter that will be filtered
+                return true;
             }
 
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.d(GymTimeActivity.class.getSimpleName(), s.toString());
-            }
+            public boolean onQueryTextSubmit(String query) {
 
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(GymTimeActivity.class.getSimpleName(), s.toString());
-            }
-
-        });
-
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 new FetchGymTasks().execute
-                        (new HashMap.SimpleEntry<String, String>("location", location.getText().toString().replace(" ", "+")));
+                        (new HashMap.SimpleEntry<String, String>("location", query));
+                return true;
             }
-        });
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_gym_time, menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_gym_time, menu);
+
+
         return true;
+
     }
 
     @Override
@@ -100,6 +83,7 @@ public class GymTimeActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     public class FetchGymTasks extends AsyncTask<Map.Entry, Void, String> {
 
