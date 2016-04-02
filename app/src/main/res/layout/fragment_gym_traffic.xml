@@ -1,0 +1,58 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="4"
+    android:orientation="vertical"
+    android:gravity="center"
+    tools:context="com.gymtime.kalyank.gymtime.GymTrafficFragment">
+
+    <TextView
+        android:id="@+id/gymName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Name"
+        android:gravity="left"
+        android:textColor="@color/colorAccent"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="10"
+        android:stepSize="1.0"
+        android:rating="2.0" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="16dp">
+
+        <TextView
+            android:id="@+id/gymAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Address"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/gymDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:text="Name"
+            android:textColor="@color/colorAccent"
+            android:textSize="10sp"
+            android:textStyle="italic" />
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

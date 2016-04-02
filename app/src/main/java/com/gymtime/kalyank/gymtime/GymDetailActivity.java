@@ -26,4 +26,5 @@ public class GymDetailActivity extends AppCompatActivity {
         });
     }
 
+
 }

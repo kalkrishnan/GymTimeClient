@@ -2,6 +2,7 @@ package com.gymtime.kalyank.gymtime;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class GymAdapter extends ArrayAdapter<Gym> {
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
         Gym gym = getItem(position);
+        Log.d(GymAdapter.class.getSimpleName(), gym.toString());
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_gym_item, parent, false);
@@ -40,6 +42,13 @@ public class GymAdapter extends ArrayAdapter<Gym> {
 
         return convertView;
     }
+
+    @Override
+    public Gym getItem(int position) {
+        return super.getItem(position);
+    }
+
+
 
     private String getDistance(String latLong) {
         DecimalFormat twoDForm = new DecimalFormat("#.##");

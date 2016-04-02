@@ -1,21 +1,22 @@
 package com.gymtime.kalyank.gymtime.dao;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Gym {
+public class Gym implements Serializable {
 
     private final String latLong;
     private final String name;
     private final String address;
-    private final List<Traffic> traffic;
+    private final List<GeneralTraffic> traffic;
 
-    public Gym(String latLong, String name, String address, List<Traffic> traffic) {
+    public Gym(String latLong, String name, String address, List<GeneralTraffic> traffic) {
 
         this.latLong = latLong;
         this.name = name;
         this.address = address;
-        this.traffic = new ArrayList<Traffic>();
+        this.traffic = traffic;
     }
 
 
@@ -31,8 +32,12 @@ public class Gym {
         return address;
     }
 
-    public List<Traffic> getTraffic() {
+    public List<GeneralTraffic> getTraffic() {
         return traffic;
     }
 
+    @Override
+    public String toString() {
+        return "LatLong: " + this.getLatLong() + " Name: " + this.getName() + " Address" + this.getAddress() + " Traffic" + this.getTraffic().toString();
+    }
 }
