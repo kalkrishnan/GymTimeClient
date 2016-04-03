@@ -70,6 +70,7 @@ public class GymDetailActivityFragment extends Fragment {
     }
 
     private List<Gym> parseGyms(String gymJson) {
+        Log.d(GymDetailActivityFragment.class.getSimpleName(), gymJson);
         JsonElement jelement = new JsonParser().parse(gymJson);
         JsonObject jobject;
         JsonArray jarray = jelement.getAsJsonArray();
@@ -88,10 +89,14 @@ public class GymDetailActivityFragment extends Fragment {
         String name = gymJson.get("name").toString().replace("\"", "");
         String address = gymJson.get("address").toString().replace("\"", "");
         String latLong = gymJson.get("id").toString().replace("\"", "");
-
+        final double trafficStrength = parseTrafficStrength(gymJson.get("traffic").getAsJsonArray().get(0).getAsJsonObject());
         return new Gym(latLong, name, address, new ArrayList() {{
-            add(new GeneralTraffic(.5));
+            add(new GeneralTraffic(trafficStrength));
         }});
+    }
+
+    private double parseTrafficStrength(JsonObject traffic) {
+        return traffic.get("trafficStrength").getAsDouble();
     }
 
 }
