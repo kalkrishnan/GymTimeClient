@@ -2,6 +2,7 @@ package com.gymtime.kalyank.gymtime;
 
 import android.app.Dialog;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,9 +10,9 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.cardiomood.android.controls.gauge.SpeedometerGauge;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.text.DecimalFormat;
@@ -59,8 +60,26 @@ public class GymTrafficFragment extends DialogFragment {
 
         gymDistance.setText(getDistance(gym.getLatLong()));
 
-        RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
-        ratingBar.setRating((int)Math.round(gym.getTraffic().get(0).getHowHeavyTrafficIs() * 10));
+//        RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
+//        ratingBar.setRating((float)gym.getTraffic().get(0).getHowHeavyTrafficIs());
+
+        SpeedometerGauge speedometer = (SpeedometerGauge) rootView.findViewById(R.id.trafficmeter);
+        speedometer.setLabelConverter(new SpeedometerGauge.LabelConverter() {
+            @Override
+            public String getLabelFor(double progress, double maxProgress) {
+                return String.valueOf((int) Math.round(progress));
+            }
+        });
+        // configure value range and ticks
+        speedometer.setMaxSpeed(100);
+        speedometer.setMajorTickStep(10);
+        speedometer.setMinorTicks(2);
+
+        // Configure value range colors
+        speedometer.addColoredRange(0, 35, Color.GREEN);
+        speedometer.addColoredRange(35 , 70, Color.YELLOW);
+        speedometer.addColoredRange(70, 100, Color.RED);
+        speedometer.setSpeed((float)gym.getTraffic().get(0).getHowHeavyTrafficIs()*100);
         dialog.setContentView(rootView);
 
         return dialog;

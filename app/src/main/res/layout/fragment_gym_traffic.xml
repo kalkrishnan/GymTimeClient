@@ -1,33 +1,27 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:weightSum="4"
+    android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:gravity="center"
+    android:weightSum="4"
     tools:context="com.gymtime.kalyank.gymtime.GymTrafficFragment">
 
     <TextView
         android:id="@+id/gymName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:gravity="left"
-        android:textColor="@color/colorAccent"
-        android:textSize="16sp"
-        android:textStyle="bold" />
-
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numStars="10"
-        android:stepSize="1.0"
-        android:rating="2.0" />
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="Name"
+        style="@style/GymTimeLabel" />
+
+
+    <LinearLayout
+        android:id="@+id/directions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/gymName"
+        android:gravity="bottom"
         android:orientation="horizontal"
         android:paddingLeft="16dp">
 
@@ -52,7 +46,38 @@
             android:textStyle="italic" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+       >
+
+        <TextView
+            android:id="@+id/traffic"
+            style="@style/GymTimeLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/traffic_label" />
+
+        <com.cardiomood.android.controls.gauge.SpeedometerGauge
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@id/traffic"
+            android:padding="8dp"
+            android:id="@+id/trafficmeter"
+            />
+
+        <!--RatingBar
+            android:id="@+id/ratingBar"
+            style="@style/GymTrafficBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:isIndicator="true"
+            android:numStars="1"
+            android:rating="2.0"
+            android:stepSize="0.1" /-->
+    </RelativeLayout>
 
 
-
-</LinearLayout>
+</RelativeLayout>
