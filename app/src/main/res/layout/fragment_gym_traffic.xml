@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center"
         android:text="Name"
-        style="@style/GymTimeLabel" />
+        style="@style/GymTimeLabelBig" />
 
 
     <LinearLayout
@@ -46,38 +46,46 @@
             android:textStyle="italic" />
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:orientation="horizontal"
        >
 
         <TextView
             android:id="@+id/traffic"
-            style="@style/GymTimeLabel"
+            style="@style/GymTimeLabelBig"
+            android:layout_gravity="bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/traffic_label" />
-
-        <com.cardiomood.android.controls.gauge.SpeedometerGauge
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:layout_below="@id/traffic"
-            android:padding="8dp"
-            android:id="@+id/trafficmeter"
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             />
 
-        <!--RatingBar
+        <!--<com.cardiomood.android.controls.gauge.SpeedometerGauge-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_below="@id/traffic"-->
+            <!--android:padding="8dp"-->
+            <!--android:id="@+id/trafficmeter"-->
+            <!--/>-->
+
+        <RatingBar
             android:id="@+id/ratingBar"
             style="@style/GymTrafficBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+
             android:isIndicator="true"
             android:numStars="1"
             android:rating="2.0"
-            android:stepSize="0.1" /-->
-    </RelativeLayout>
+            android:stepSize="0.1" />
+    </LinearLayout>
 
 
 </RelativeLayout>
