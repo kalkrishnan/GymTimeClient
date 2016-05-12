@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
+    <data>
+        <variable android:name="gym" android:type="com.gymtime.kalyank.gymtime.dao.Gym"/>
+    </data>
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
@@ -13,7 +15,7 @@
         android:id="@+id/gymName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Name"
+        android:text="@{gym.name}"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
         android:textStyle="bold"/>
@@ -21,7 +23,7 @@
         android:id="@+id/gymAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Address"
+        android:text="@{gym.address}"
         android:textSize="10sp"
         android:textStyle="italic"/>
 
