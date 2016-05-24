@@ -1,10 +1,9 @@
-package com.gymtime.kalyank.gymtime;
+package com.gymtime.kalyank.gymtime.session;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
@@ -14,10 +13,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gymtime.kalyank.gymtime.GymTimeActivity;
+import com.gymtime.kalyank.gymtime.R;
+import com.gymtime.kalyank.gymtime.communication.HTTPClient;
+
+import java.util.HashMap;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class LoginActivity extends AppCompatActivity {
+    SessionManager sessionManager;
+    private String userId;
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
     @BindView(R.id.input_email)
@@ -33,6 +40,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sessionManager = new SessionManager();
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         ButterKnife.setDebug(true);
@@ -49,9 +57,9 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-//                // Start the Signup activity
-//                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-//                startActivityForResult(intent, REQUEST_SIGNUP);
+                // Start the Signup activity
+                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                startActivityForResult(intent, REQUEST_SIGNUP);
             }
         });
     }
@@ -74,18 +82,24 @@ public class LoginActivity extends AppCompatActivity {
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-
+        userId = generateUserId(email, password);
         // TODO: Implement your own authentication logic here.
 
         new Handler().postDelayed(
                 new Runnable() {
                     public void run() {
                         // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
+                        onLoginSuccess(userId);
                         // onLoginFailed();
                         progressDialog.dismiss();
                     }
                 }, 3000);
+    }
+
+    private String generateUserId(String email, String password) {
+        return HTTPClient.getData(new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_login_url)),
+                new HashMap.SimpleEntry<String, String>("location", email),
+                new HashMap.SimpleEntry<String, String>("location", password));
     }
 
 
@@ -107,8 +121,11 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
+    public void onLoginSuccess(String userId) {
         _loginButton.setEnabled(true);
+        sessionManager.setPreferences(LoginActivity.this, "user", userId);
+        Intent intent = new Intent(LoginActivity.this, GymTimeActivity.class);
+        startActivity(intent);
         finish();
     }
 
