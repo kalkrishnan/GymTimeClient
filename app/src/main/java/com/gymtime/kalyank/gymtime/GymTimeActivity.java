@@ -93,13 +93,14 @@ public class GymTimeActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Map.Entry... urls) {
 
-            return HTTPClient.getData(urls);
+            return HTTPClient.getData(urls).getMessage();
 
         }
 
 
         @Override
         protected void onPostExecute(String gymJson) {
+            Log.d(GymTimeActivity.class.getCanonicalName(), gymJson);
             Intent myIntent = new Intent(GymTimeActivity.this, GymDetailActivity.class);
             myIntent.putExtra(Intent.EXTRA_TEXT, gymJson); //Optional parameters
             GymTimeActivity.this.startActivity(myIntent);

@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class HTTPClient {
 
-    public static String getData(Map.Entry... urls) {
+    public static HTTPResponse getData(Map.Entry... urls) {
 
         Log.d(HTTPClient.class.getCanonicalName(), "in HTTPClient");
         HttpURLConnection urlConnection = null;
@@ -42,35 +42,19 @@ public class HTTPClient {
             }
 
             URL url = new URL(uriBuilder.build().toString());
-            Log.d(HTTPClient.class.getSimpleName(), "URL: " + url);
+
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-
-            // Read the input stream into a String
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-
-            if (inputStream == null) {
-                // Nothing to do.
-                return null;
+            BufferedReader br = new BufferedReader(new InputStreamReader((urlConnection.getInputStream())));
+            StringBuilder sb = new StringBuilder();
+            while ((output = br.readLine()) != null) {
+                sb.append(output);
             }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
+            return new HTTPResponse(urlConnection.getResponseCode(), sb.toString());
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                // But it does make debugging a *lot* easier if you print out the completed
-                // buffer for debugging.
-                buffer.append(line + "\n");
-            }
 
-            if (buffer.length() == 0) {
-                // Stream was empty.  No point in parsing.
-                return null;
-            }
-            output = buffer.toString();
         } catch (ProtocolException e) {
             e.printStackTrace();
         } catch (MalformedURLException e) {
@@ -78,6 +62,6 @@ public class HTTPClient {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return output;
+        return null;
     }
 }

@@ -16,9 +16,12 @@ import com.gymtime.kalyank.gymtime.GymDetailActivity;
 import com.gymtime.kalyank.gymtime.GymTimeActivity;
 import com.gymtime.kalyank.gymtime.R;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
+import com.gymtime.kalyank.gymtime.communication.HTTPResponse;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,7 @@ public class SignUpActivity extends AppCompatActivity {
     Button _signupButton;
     @BindView(R.id.link_login)
     TextView _loginLink;
+    ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,20 +65,6 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    public class SignUpTask extends AsyncTask<Map.Entry, Void, String> {
-
-        @Override
-        protected String doInBackground(Map.Entry... urls) {
-
-            return HTTPClient.getData(urls);
-        }
-
-        @Override
-        protected void onPostExecute(String _userId) {
-            generateUserId(_userId);
-        }
-
-    }
 
     private void generateUserId(String _userId) {
         userId = _userId;
@@ -90,37 +80,46 @@ public class SignUpActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        final ProgressDialog progressDialog = new ProgressDialog(SignUpActivity.this,
-                R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Creating Account...");
-        progressDialog.show();
+        progressDialog = ProgressDialog.show(SignUpActivity.this,
+                null, "Creating Account...");
 
         String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-         new SignUpTask().execute(new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_signup_url)),
+        new SignUpTask().execute(new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_signup_url)),
                 new HashMap.SimpleEntry<String, String>("name", name),
                 new HashMap.SimpleEntry<String, String>("email", email),
                 new HashMap.SimpleEntry<String, String>("password", password));
 
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onSignupSuccess or onSignupFailed
-                        // depending on success
-                        onSignupSuccess();
-                        // onSignupFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
         return "";
     }
 
+    public class SignUpTask extends AsyncTask<Map.Entry, Void, HTTPResponse> {
+
+        @Override
+        protected HTTPResponse doInBackground(Map.Entry... urls) {
+
+            return HTTPClient.getData(urls);
+        }
+
+        @Override
+        protected void onPostExecute(HTTPResponse response) {
+
+            if (response.getCode() == HttpsURLConnection.HTTP_OK) {
+                generateUserId(response.getMessage());
+                onSignupSuccess();
+            } else {
+                Log.d(SignUpActivity.TAG, response.getMessage());
+                onSignupFailed();
+            }
+        }
+
+    }
 
     public void onSignupSuccess() {
         _signupButton.setEnabled(true);
+        progressDialog.dismiss();
         setResult(RESULT_OK, null);
         sessionManager.setPreferences(SignUpActivity.this, "user", userId);
         Intent intent = new Intent(SignUpActivity.this, GymTimeActivity.class);
@@ -129,7 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Sign Up failed", Toast.LENGTH_LONG).show();
 
         _signupButton.setEnabled(true);
     }
