@@ -10,21 +10,21 @@
         android:layout_weight="1"
         android:orientation="vertical"
         android:paddingLeft="16dp">
-    <TextView
-        android:id="@+id/gymName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Name"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp"
-        android:textStyle="bold"/>
-    <TextView
-        android:id="@+id/gymAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Address"
-        android:textSize="10sp"
-        android:textStyle="italic"/>
+        <TextView
+            android:id="@+id/gymName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/gymAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Address"
+            android:textSize="10sp"
+            android:textStyle="italic"/>
 
     </LinearLayout>
 

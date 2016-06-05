@@ -45,7 +45,6 @@ public class GymDetailActivityFragment extends Fragment {
         gymView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                FragmentManager manager = getFragmentManager();
                 GymTrafficFragment frag = new GymTrafficFragment();
 
                 Bundle bundles = new Bundle();
@@ -62,6 +61,7 @@ public class GymDetailActivityFragment extends Fragment {
                 }
 
                 frag.setArguments(bundles);
+
                 frag.show(getFragmentManager(), "traffic");
             }
         });
