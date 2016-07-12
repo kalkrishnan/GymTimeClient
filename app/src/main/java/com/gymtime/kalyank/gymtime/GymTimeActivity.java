@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GymTimeActivity extends AppCompatActivity {
+public class GymTimeActivity extends BaseActivity {
 
     private EditText location;
 
@@ -65,7 +65,7 @@ public class GymTimeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_gym_time, menu);
+        inflater.inflate(R.menu.menu_gym_base, menu);
 
 
         return true;

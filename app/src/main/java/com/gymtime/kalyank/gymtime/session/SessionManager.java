@@ -23,4 +23,12 @@ public class SessionManager {
         return position;
     }
 
+    public void clearPreferences(Context context)
+    {
+        SharedPreferences prefs = context.getSharedPreferences("GymTime", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.clear();
+        editor.commit();
+    }
+
 }

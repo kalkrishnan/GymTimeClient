@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">GymTime</string>
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Logout</string>
     <string name="view_location_id">location</string>
     <string name="title_activity_gym_detail">Gyms Near Your Location</string>
     <string name="gym_service_url">http://10.0.2.2:8080/gymTimeService/searchGyms</string>
@@ -9,8 +10,9 @@
     <string name="traffic_label">Traffic</string>
     <string name="check_in">Check In</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gym_login_url">http://10.0.2.2:8080/gymTimeService/login</string>
     <string name="gym_signup_url">http://10.0.2.2:8080/gymTimeService/signup</string>
+    <string name="title_activity_base">BaseActivity</string>
 </resources>

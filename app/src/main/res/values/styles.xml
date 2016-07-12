@@ -7,14 +7,18 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:colorBackground">@color/colorTransparent</item>
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <style name="CustomDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:paddingTop">20dp</item>
@@ -23,28 +27,33 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:windowIsFloating">false</item>
     </style>
-    <style name="GymTrafficBar" parent="android:attr/ratingBarStyleIndicator" >
+
+    <style name="GymTrafficBar" parent="android:attr/ratingBarStyleIndicator">
         <item name="android:progressDrawable">@drawable/gym_trafficbar_full</item>
         <item name="android:minHeight">50dip</item>
         <item name="android:maxHeight">50dip</item>
     </style>
+
     <style name="GymTimeLabel" parent="@android:style/TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">16sp</item>
         <item name="android:gravity">bottom</item>
     </style>
+
     <style name="GymTimeLabelBig" parent="@android:style/TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textSize">24sp</item>
         <item name="android:layout_gravity">bottom</item>
     </style>
+
     <style name="GymTimeValue" parent="@android:style/TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textStyle">italic</item>
         <item name="android:textSize">10sp</item>
     </style>
+
     <style name="GymTimeScroll">
         <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>
