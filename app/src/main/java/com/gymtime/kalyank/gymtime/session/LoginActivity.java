@@ -99,12 +99,14 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(HTTPResponse response) {
-            if (response.getCode() == HttpsURLConnection.HTTP_OK) {
-                generateUserId(response.getMessage());
-                onLoginSuccess();
-            } else {
+            if (response.getMessage().toString()== getString(R.string.invalid_login_credentials))
+            {
                 Log.d(LoginActivity.TAG, response.getMessage());
                 onLoginFailed();
+            } else {
+                generateUserId(response.getMessage());
+                onLoginSuccess();
+
             }
         }
 
@@ -144,7 +146,7 @@ public class LoginActivity extends AppCompatActivity {
 
     public void onLoginFailed() {
         Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-
+        progressDialog.dismiss();
         _loginButton.setEnabled(true);
     }
 

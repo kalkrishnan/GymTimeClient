@@ -9,6 +9,8 @@
     <string name="menu_search">Search</string>
     <string name="traffic_label">Traffic</string>
     <string name="check_in">Check In</string>
+    <string name="invalid_login_credentials">"INVALID_EMAIL_OR_PASSWORD"</string>
+    <string name="email_already_exists">"EMAIL_ALREADY_EXISTS"</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

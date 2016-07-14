@@ -52,6 +52,7 @@ public class HTTPClient {
             while ((output = br.readLine()) != null) {
                 sb.append(output);
             }
+            Log.d(HTTPClient.class.getCanonicalName(), sb.toString());
             return new HTTPResponse(urlConnection.getResponseCode(), sb.toString());
 
 

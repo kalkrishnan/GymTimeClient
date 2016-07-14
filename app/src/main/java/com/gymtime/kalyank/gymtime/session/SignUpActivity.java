@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -74,7 +75,7 @@ public class SignUpActivity extends AppCompatActivity {
         Log.d(TAG, "Signup");
 
         if (!validate()) {
-            onSignupFailed();
+            onSignupFailed("Invalid Input");
             return "";
         }
 
@@ -106,12 +107,14 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(HTTPResponse response) {
 
-            if (response.getCode() == HttpsURLConnection.HTTP_OK) {
+            Log.d(SignUpActivity.class.getCanonicalName(), response.getMessage());
+            Log.d(SignUpActivity.class.getCanonicalName(), getString(R.string.email_already_exists));
+            if (response.getMessage().toString() == getString(R.string.email_already_exists)) {
                 generateUserId(response.getMessage());
                 onSignupSuccess();
             } else {
                 Log.d(SignUpActivity.TAG, response.getMessage());
-                onSignupFailed();
+                onSignupFailed(response.getMessage());
             }
         }
 
@@ -127,9 +130,9 @@ public class SignUpActivity extends AppCompatActivity {
         finish();
     }
 
-    public void onSignupFailed() {
-        Toast.makeText(getBaseContext(), "Sign Up failed", Toast.LENGTH_LONG).show();
-
+    public void onSignupFailed(String error) {
+        Toast.makeText(getBaseContext(), error, Toast.LENGTH_LONG).show();
+        progressDialog.dismiss();
         _signupButton.setEnabled(true);
     }
 
