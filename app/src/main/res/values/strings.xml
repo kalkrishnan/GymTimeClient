@@ -9,12 +9,17 @@
     <string name="menu_search">Search</string>
     <string name="traffic_label">Traffic</string>
     <string name="check_in">Check In</string>
-    <string name="invalid_login_credentials">"INVALID_EMAIL_OR_PASSWORD"</string>
-    <string name="email_already_exists">"EMAIL_ALREADY_EXISTS"</string>
+    <string name="invalid_login_credentials">Invalid Email Or Password</string>
+    <string name="email_already_exists">Email Already Exists</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gym_login_url">http://10.0.2.2:8080/gymTimeService/login</string>
     <string name="gym_signup_url">http://10.0.2.2:8080/gymTimeService/signup</string>
+    <string name="gym_favorite_url">http://10.0.2.2:8080/gymTimeService/addToFavorites</string>
+    <string name="gym_unfavorite_url">http://10.0.2.2:8080/gymTimeService/removeFromFavorites</string>
+    <string name="user_getfavorites_url">http://10.0.2.2:8080/gymTimeService/getUserFavorites</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="gym_bundle">gymBundle</string>
+
 </resources>

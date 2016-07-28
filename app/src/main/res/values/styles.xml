@@ -34,6 +34,12 @@
         <item name="android:maxHeight">50dip</item>
     </style>
 
+    <style name="GymFavorite" >
+        <item name="android:progressDrawable">@drawable/btn_star</item>
+        <item name="android:minHeight">20dp</item>
+        <item name="android:maxHeight">20dp</item>
+    </style>
+
     <style name="GymTimeLabel" parent="@android:style/TextAppearance.Widget.TextView">
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textStyle">bold|italic</item>

@@ -19,7 +19,7 @@ public class HTTPResponse {
     }
 
     public String getMessage() {
-        return message;
+        return message.replaceAll("^\"|\"$", "");
     }
 
     @Override

@@ -15,6 +15,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
+import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
 
 import java.io.BufferedReader;
@@ -52,7 +54,16 @@ public class GymTimeActivity extends BaseActivity {
 
             public boolean onQueryTextSubmit(String query) {
 
-                new FetchGymTasks().execute
+                new CommunicationTask(new CommunicationTask.CommunicationResponse() {
+                    @Override
+                    public void processFinish(String output) {
+                        Intent myIntent = new Intent(GymTimeActivity.this, GymDetailActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList(getString(R.string.gym_bundle), GymTimeHelper.parseGyms(output));
+                        myIntent.putExtras(bundle);
+                        GymTimeActivity.this.startActivity(myIntent);
+                    }
+                }).execute
                         (new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_service_url)),
                                 new HashMap.SimpleEntry<String, String>("location", query));
                 return true;
@@ -101,9 +112,7 @@ public class GymTimeActivity extends BaseActivity {
         @Override
         protected void onPostExecute(String gymJson) {
             Log.d(GymTimeActivity.class.getCanonicalName(), gymJson);
-            Intent myIntent = new Intent(GymTimeActivity.this, GymDetailActivity.class);
-            myIntent.putExtra(Intent.EXTRA_TEXT, gymJson); //Optional parameters
-            GymTimeActivity.this.startActivity(myIntent);
+
         }
 
     }

@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gymtime.kalyank.gymtime.GymDetailActivity;
 import com.gymtime.kalyank.gymtime.GymTimeActivity;
 import com.gymtime.kalyank.gymtime.R;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
@@ -21,8 +19,6 @@ import com.gymtime.kalyank.gymtime.communication.HTTPResponse;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,12 +105,13 @@ public class SignUpActivity extends AppCompatActivity {
 
             Log.d(SignUpActivity.class.getCanonicalName(), response.getMessage());
             Log.d(SignUpActivity.class.getCanonicalName(), getString(R.string.email_already_exists));
-            if (response.getMessage().toString() == getString(R.string.email_already_exists)) {
-                generateUserId(response.getMessage());
-                onSignupSuccess();
-            } else {
+            if (response.getMessage().toString().equals(getString(R.string.email_already_exists))) {
                 Log.d(SignUpActivity.TAG, response.getMessage());
                 onSignupFailed(response.getMessage());
+
+            } else {
+                generateUserId(response.getMessage());
+                onSignupSuccess();
             }
         }
 
@@ -124,8 +121,9 @@ public class SignUpActivity extends AppCompatActivity {
         _signupButton.setEnabled(true);
         progressDialog.dismiss();
         setResult(RESULT_OK, null);
-        sessionManager.setPreferences(SignUpActivity.this, "user", userId);
+        sessionManager.setPreference(SignUpActivity.this, "userId", userId);
         Intent intent = new Intent(SignUpActivity.this, GymTimeActivity.class);
+        intent.putExtra(Intent.EXTRA_TEXT, "");
         startActivity(intent);
         finish();
     }

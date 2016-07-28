@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
@@ -16,13 +15,16 @@ import android.widget.Toast;
 
 import com.gymtime.kalyank.gymtime.GymTimeActivity;
 import com.gymtime.kalyank.gymtime.R;
+import com.gymtime.kalyank.gymtime.common.Constants;
+import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
+import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
 import com.gymtime.kalyank.gymtime.communication.HTTPResponse;
+import com.gymtime.kalyank.gymtime.dao.Gym;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.link_signup)
     TextView _signupLink;
     ProgressDialog progressDialog;
+    private String gymJson;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -73,7 +76,7 @@ public class LoginActivity extends AppCompatActivity {
         Log.d(TAG, "Login");
 
         if (!validate()) {
-            onLoginFailed();
+            onLoginFailed("");
             return;
         }
 
@@ -99,13 +102,11 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(HTTPResponse response) {
-            if (response.getMessage().toString()== getString(R.string.invalid_login_credentials))
-            {
+            if (response.getMessage().toString().equals(getString(R.string.invalid_login_credentials))) {
                 Log.d(LoginActivity.TAG, response.getMessage());
-                onLoginFailed();
+                onLoginFailed(response.getMessage());
             } else {
                 generateUserId(response.getMessage());
-                onLoginSuccess();
 
             }
         }
@@ -115,7 +116,27 @@ public class LoginActivity extends AppCompatActivity {
 
     private void generateUserId(String _userId) {
         userId = _userId;
+        new CommunicationTask(new CommunicationTask.CommunicationResponse() {
+            @Override
+            public void processFinish(String output) {
+                gymJson = output;
+                _loginButton.setEnabled(true);
+                progressDialog.dismiss();
+                sessionManager.setPreference(LoginActivity.this, Constants.USER_ID.toString(), userId);
+                Intent myIntent = new Intent(LoginActivity.this, GymTimeActivity.class);
+                Bundle bundle = new Bundle();
+                final ArrayList<Gym> listGyms = GymTimeHelper.parseGyms(gymJson);
+                sessionManager.setPreferences(LoginActivity.this, Constants.FAVORITE_GYM_IDS.toString(), GymTimeHelper.generateFavoriteGymIds(listGyms));
+                bundle.putParcelableArrayList(getString(R.string.gym_bundle), listGyms);
+                myIntent.putExtras(bundle);
+                LoginActivity.this.startActivity(myIntent);
+                finish();
+            }
+        }).execute(new HashMap.SimpleEntry<String, String>("url", getString(R.string.user_getfavorites_url)),
+                new HashMap.SimpleEntry<String, String>("userId", userId));
+
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -138,14 +159,17 @@ public class LoginActivity extends AppCompatActivity {
     public void onLoginSuccess() {
         _loginButton.setEnabled(true);
         progressDialog.dismiss();
-        sessionManager.setPreferences(LoginActivity.this, "user", userId);
-        Intent intent = new Intent(LoginActivity.this, GymTimeActivity.class);
-        startActivity(intent);
+        sessionManager.setPreference(LoginActivity.this, "userId", userId);
+        Intent myIntent = new Intent(LoginActivity.this, GymTimeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(getString(R.string.gym_bundle), GymTimeHelper.parseGyms(gymJson));
+        myIntent.putExtras(bundle);
+        LoginActivity.this.startActivity(myIntent);
         finish();
     }
 
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
+    public void onLoginFailed(String errorMessage) {
+        Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
         progressDialog.dismiss();
         _loginButton.setEnabled(true);
     }
