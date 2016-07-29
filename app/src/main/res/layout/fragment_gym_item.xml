@@ -33,6 +33,15 @@
 
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/favorite"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:background="@drawable/btn_star" />
+
+
     <TextView
         android:id="@+id/gymDistance"
         android:layout_width="wrap_content"
@@ -42,13 +51,5 @@
         android:textSize="10sp"
         android:textColor="#FFFFFF"
         android:textStyle="italic" />
-
-    <ImageButton
-        android:id="@+id/favorite"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:background="@drawable/btn_star" />
 
 </LinearLayout>

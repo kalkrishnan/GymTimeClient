@@ -38,6 +38,7 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
 
     SessionManager sessionManager;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
@@ -60,11 +61,11 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
         Set<String> favoriteGyms = sessionManager.getPreferences(this.getContext(), Constants.FAVORITE_GYM_IDS.toString());
 
         final ImageButton gymFavoriteButton = (ImageButton) convertView.findViewById(R.id.favorite);
-        if (favoriteGyms.contains(GymTimeHelper.generateId(gym)))
-        {
-            Log.d(GymItemAdapter.class.getCanonicalName(), Arrays.toString(favoriteGyms.toArray()));
-            Log.d(GymItemAdapter.class.getCanonicalName(), GymTimeHelper.generateId(gym));
-            gymFavoriteButton.setPressed(true);
+        Log.d(GymItemAdapter.class.getCanonicalName(), "List Gym: " + gym.getName());
+        if (favoriteGyms.contains(GymTimeHelper.generateId(gym))) {
+            Log.d(GymItemAdapter.class.getCanonicalName(), "Favorite Gym: " + gym.getName());
+            gymFavoriteButton.setSelected(true);
+            gymFavoriteButton.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_on_pressed, null));
         }
 
         gymFavoriteButton.setOnTouchListener(new View.OnTouchListener() {
@@ -74,7 +75,6 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     if (!gymFavoriteButton.isSelected()) {
                         gymFavoriteButton.setSelected(true);
-                        Log.d(GymItemAdapter.class.getCanonicalName(), "Button Pressed");
                         v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_on_pressed, null));
                         new AddFavoriteGym().execute
                                 (new HashMap.SimpleEntry<String, String>("url", getContext().getString(R.string.gym_favorite_url)),
@@ -102,6 +102,17 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
         return super.getItem(position);
     }
 
+    @Override
+    public int getViewTypeCount() {
+
+        return getCount();
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+
+        return position;
+    }
 
     private String getDistance(String latLong) {
         DecimalFormat twoDForm = new DecimalFormat("#.##");
@@ -122,7 +133,6 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
 
         @Override
         protected String doInBackground(Map.Entry... urls) {
-
             return HTTPClient.getData(urls).getMessage();
 
         }

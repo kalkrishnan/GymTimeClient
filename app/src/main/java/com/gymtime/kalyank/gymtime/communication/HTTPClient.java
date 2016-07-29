@@ -23,7 +23,6 @@ public class HTTPClient {
 
     public static HTTPResponse getData(Map.Entry... urls) {
 
-        Log.d(HTTPClient.class.getCanonicalName(), "in HTTPClient");
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
@@ -36,13 +35,14 @@ public class HTTPClient {
             // http://openweathermap.org/API#forecast
 
             String URL = urls[0].getValue().toString();
+            Log.d(HTTPClient.class.getCanonicalName(), "in HTTPClient: "+URL);
+
             Uri.Builder uriBuilder = Uri.parse(URL).buildUpon();
             for (int i = 1; i < urls.length; i++) {
                 uriBuilder.appendQueryParameter(urls[i].getKey().toString(), urls[i].getValue().toString());
             }
 
             URL url = new URL(uriBuilder.build().toString());
-
             // Create the request to OpenWeatherMap, and open the connection
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");

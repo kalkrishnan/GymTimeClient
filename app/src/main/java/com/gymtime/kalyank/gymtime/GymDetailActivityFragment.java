@@ -18,6 +18,7 @@ import com.gymtime.kalyank.gymtime.dao.GeneralTraffic;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -38,12 +39,14 @@ public class GymDetailActivityFragment extends Fragment {
         Bundle extras = this.getActivity().getIntent().getExtras();
 
 
-        if (!extras.getParcelableArrayList(getString(R.string.gym_bundle)).isEmpty()) {
+        if (extras.getParcelableArrayList(getString(R.string.gym_bundle)) != null && !extras.getParcelableArrayList(getString(R.string.gym_bundle)).isEmpty()) {
             gymAdapter = new GymItemAdapter(this.getContext(), new ArrayList<Gym>());
             ListView gymView = ((ListView) rootView.findViewById(R.id.gym_detail));
-            gymView.setAdapter(gymAdapter);
+
             List<Gym> gymJson = extras.getParcelableArrayList(getString(R.string.gym_bundle));
+            Log.d(GymDetailActivityFragment.class.getCanonicalName(), Arrays.toString(gymJson.toArray()));
             gymAdapter.addAll(gymJson);
+            gymView.setAdapter(gymAdapter);
             gymView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
