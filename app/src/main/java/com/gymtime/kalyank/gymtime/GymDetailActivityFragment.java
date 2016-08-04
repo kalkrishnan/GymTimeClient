@@ -10,11 +10,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.gymtime.kalyank.gymtime.dao.GeneralTraffic;
+import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.util.ArrayList;
@@ -50,11 +46,8 @@ public class GymDetailActivityFragment extends Fragment {
             gymView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    GymTrafficFragment frag = new GymTrafficFragment();
-
                     Bundle bundles = new Bundle();
                     Gym item = (Gym) parent.getItemAtPosition(position);
-                    Log.d(GymDetailActivityFragment.class.getSimpleName(), Integer.toString(item.getTraffic().size()));
                     if (item != null) {
 
                         bundles.putSerializable("gym", item);
@@ -65,9 +58,10 @@ public class GymDetailActivityFragment extends Fragment {
 
                     }
 
-                    frag.setArguments(bundles);
+                    Intent myIntent = new Intent(getActivity(), GymDetailTabs.class);
+                    myIntent.putExtras(bundles);
+                    startActivity(myIntent);
 
-                    frag.show(getFragmentManager(), "traffic");
                 }
             });
         } else {

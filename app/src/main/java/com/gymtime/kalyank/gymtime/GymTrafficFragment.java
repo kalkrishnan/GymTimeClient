@@ -1,17 +1,15 @@
 package com.gymtime.kalyank.gymtime;
 
 import android.annotation.TargetApi;
-import android.app.Dialog;
-import android.app.Fragment;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -29,28 +27,23 @@ import java.text.DecimalFormat;
  * Use the {@link GymTrafficFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GymTrafficFragment extends DialogFragment implements TimePickerFragment.OnTimerSelectionListener {
+public class GymTrafficFragment extends Fragment implements TimePickerFragment.OnTimerSelectionListener {
 
 
-    public static GymTrafficFragment newInstance() {
+    public static GymTrafficFragment newInstance(Gym gym) {
+        Bundle bundles = new Bundle();
+        bundles.putSerializable("gym", gym);
         GymTrafficFragment f = new GymTrafficFragment();
+        f.setArguments(bundles);
 
         return f;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-
-    @NonNull
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final Dialog dialog = new Dialog(getActivity(), R.style.CustomDialog);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         Bundle bundle = getArguments();
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         Gym gym = (Gym) bundle.getSerializable("gym");
 
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_gym_traffic, null);
@@ -59,9 +52,9 @@ public class GymTrafficFragment extends DialogFragment implements TimePickerFrag
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
-                DialogFragment newFragment = new TimePickerFragment();
-                getChildFragmentManager().beginTransaction().add(newFragment, newFragment.getTag()).commit();
-                newFragment.show(getFragmentManager(), "timePicker");
+                DialogFragment timePickerFragment = new TimePickerFragment();
+//                getChildFragmentManager().beginTransaction().add(timePickerFragment, timePickerFragment.getTag()).commit();
+//                timePickerFragment.show(getFragmentManager(), "timePicker");
 
             }
         });
@@ -93,10 +86,11 @@ public class GymTrafficFragment extends DialogFragment implements TimePickerFrag
 //        speedometer.addColoredRange(35 , 70, Color.YELLOW);
 //        speedometer.addColoredRange(70, 100, Color.RED);
 //        speedometer.setSpeed((float)gym.getTraffic().get(0).getHowHeavyTrafficIs()*100);
-        dialog.setContentView(rootView);
+        return rootView;
 
-        return dialog;
     }
+
+
 
     private String getDistance(String latLong) {
         DecimalFormat twoDForm = new DecimalFormat("#.##");

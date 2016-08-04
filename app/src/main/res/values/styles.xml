@@ -34,7 +34,7 @@
         <item name="android:maxHeight">50dip</item>
     </style>
 
-    <style name="GymFavorite" >
+    <style name="GymFavorite">
         <item name="android:progressDrawable">@drawable/btn_star</item>
         <item name="android:minHeight">20dp</item>
         <item name="android:maxHeight">20dp</item>

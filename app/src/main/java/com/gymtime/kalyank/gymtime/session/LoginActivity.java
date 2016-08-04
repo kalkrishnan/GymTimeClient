@@ -156,17 +156,6 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
-        progressDialog.dismiss();
-        sessionManager.setPreference(LoginActivity.this, "userId", userId);
-        Intent myIntent = new Intent(LoginActivity.this, GymTimeActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(getString(R.string.gym_bundle), GymTimeHelper.parseGyms(gymJson));
-        myIntent.putExtras(bundle);
-        LoginActivity.this.startActivity(myIntent);
-        finish();
-    }
 
     public void onLoginFailed(String errorMessage) {
         Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.gymtime.kalyank.gymtime.common.Constants;
 import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
+import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 import com.gymtime.kalyank.gymtime.session.SessionManager;
@@ -76,14 +77,24 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
                     if (!gymFavoriteButton.isSelected()) {
                         gymFavoriteButton.setSelected(true);
                         v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_on_pressed, null));
-                        new AddFavoriteGym().execute
+                        new CommunicationTask(new CommunicationTask.CommunicationResponse() {
+                            @Override
+                            public void processFinish(String output) {
+
+                            }
+                        }).execute
                                 (new HashMap.SimpleEntry<String, String>("url", getContext().getString(R.string.gym_favorite_url)),
                                         new HashMap.SimpleEntry<String, String>("gymId", gymId),
                                         new HashMap.SimpleEntry<String, String>("userId", userId));
                     } else {
                         gymFavoriteButton.setSelected(false);
                         v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_off, null));
-                        new AddFavoriteGym().execute
+                        new CommunicationTask(new CommunicationTask.CommunicationResponse() {
+                            @Override
+                            public void processFinish(String output) {
+
+                            }
+                        }).execute
                                 (new HashMap.SimpleEntry<String, String>("url", getContext().getString(R.string.gym_unfavorite_url)),
                                         new HashMap.SimpleEntry<String, String>("gymId", gymId),
                                         new HashMap.SimpleEntry<String, String>("userId", userId));
@@ -129,14 +140,5 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
         return twoDForm.format(gym.distanceTo(home) / 1600) + "mi";
     }
 
-    public class AddFavoriteGym extends AsyncTask<Map.Entry, Void, String> {
 
-        @Override
-        protected String doInBackground(Map.Entry... urls) {
-            return HTTPClient.getData(urls).getMessage();
-
-        }
-
-
-    }
 }
