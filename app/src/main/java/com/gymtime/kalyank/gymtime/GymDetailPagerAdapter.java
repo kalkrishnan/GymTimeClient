@@ -1,6 +1,5 @@
 package com.gymtime.kalyank.gymtime;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -8,7 +7,7 @@ import android.util.Log;
 
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
-import layout.GymComments;
+import layout.GymCommentsFragment;
 
 /**
  * Created by kalyanak on 7/31/2016.
@@ -32,7 +31,7 @@ public class GymDetailPagerAdapter extends FragmentStatePagerAdapter {
                 GymTrafficFragment tab1 = GymTrafficFragment.newInstance(gym);
                 return tab1;
             case 1:
-                GymComments tab2 = new GymComments();
+                GymCommentsFragment tab2 = new GymCommentsFragment();
                 return tab2;
 
             default:

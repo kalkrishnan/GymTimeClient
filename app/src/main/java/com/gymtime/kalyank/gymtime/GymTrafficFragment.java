@@ -53,8 +53,8 @@ public class GymTrafficFragment extends Fragment implements TimePickerFragment.O
             @Override
             public void onClick(View v) {
                 DialogFragment timePickerFragment = new TimePickerFragment();
-//                getChildFragmentManager().beginTransaction().add(timePickerFragment, timePickerFragment.getTag()).commit();
-//                timePickerFragment.show(getFragmentManager(), "timePicker");
+                getChildFragmentManager().beginTransaction().add(timePickerFragment, timePickerFragment.getTag()).commit();
+                timePickerFragment.show(getFragmentManager(), "timePicker");
 
             }
         });

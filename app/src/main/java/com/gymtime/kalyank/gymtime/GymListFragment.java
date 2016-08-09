@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.util.ArrayList;
@@ -20,11 +19,11 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class GymDetailActivityFragment extends Fragment {
+public class GymListFragment extends Fragment {
 
     private GymItemAdapter gymAdapter;
 
-    public GymDetailActivityFragment() {
+    public GymListFragment() {
     }
 
     @Override
@@ -40,7 +39,7 @@ public class GymDetailActivityFragment extends Fragment {
             ListView gymView = ((ListView) rootView.findViewById(R.id.gym_detail));
 
             List<Gym> gymJson = extras.getParcelableArrayList(getString(R.string.gym_bundle));
-            Log.d(GymDetailActivityFragment.class.getCanonicalName(), Arrays.toString(gymJson.toArray()));
+            Log.d(GymListFragment.class.getCanonicalName(), Arrays.toString(gymJson.toArray()));
             gymAdapter.addAll(gymJson);
             gymView.setAdapter(gymAdapter);
             gymView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

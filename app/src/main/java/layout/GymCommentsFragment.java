@@ -1,70 +1,59 @@
 package layout;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 
+import com.gymtime.kalyank.gymtime.GymCommentAdapter;
 import com.gymtime.kalyank.gymtime.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GymComments.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GymComments#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class GymComments extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import java.util.ArrayList;
 
 
-    public GymComments() {
+public class GymCommentsFragment extends Fragment {
+
+    EditText commentText;
+    ListView gymComments;
+    public ArrayList<String> comments = new ArrayList<String>();
+    private GymCommentAdapter commentAdapter;
+
+    public GymCommentsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GymComments.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GymComments newInstance(String param1, String param2) {
-        GymComments fragment = new GymComments();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gym_comments, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_gym_comments, container, false);
+        gymComments = ((ListView) rootView.findViewById(R.id.gym_comments));
+        commentAdapter = new GymCommentAdapter(this.getContext(), comments);
+        commentAdapter.addAll(comments);
+        gymComments.setAdapter(commentAdapter);
+        Button gymButton = ((Button) rootView.findViewById(R.id.comment_send));
+        commentText = (EditText) rootView.findViewById(R.id.comment_text);
+        gymButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final String comment = commentText.getText().toString();
+                commentText.getText().clear();
+                Log.d(GymCommentsFragment.class.getCanonicalName(), "Adding Comment: "+comment);
+                comments.add(comment);
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
+        return rootView;
     }
 
 //    // TODO: Rename method, update argument and hook method into UI event

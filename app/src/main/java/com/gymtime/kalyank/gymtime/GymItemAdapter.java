@@ -48,7 +48,6 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_gym_item, parent, false);
         }
-        Boolean favorite = false;
         TextView gymName = (TextView) convertView.findViewById(R.id.gymName);
         TextView gymAddress = (TextView) convertView.findViewById(R.id.gymAddress);
         TextView gymDistance = (TextView) convertView.findViewById(R.id.gymDistance);
