@@ -31,7 +31,7 @@ public class GymDetailPagerAdapter extends FragmentStatePagerAdapter {
                 GymTrafficFragment tab1 = GymTrafficFragment.newInstance(gym);
                 return tab1;
             case 1:
-                GymCommentsFragment tab2 = new GymCommentsFragment();
+                GymCommentsFragment tab2 = GymCommentsFragment.newInstance(gym);
                 return tab2;
 
             default:

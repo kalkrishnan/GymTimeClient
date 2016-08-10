@@ -20,6 +20,8 @@
     <string name="gym_unfavorite_url">http://10.0.2.2:8080/gymTimeService/removeFromFavorites</string>
     <string name="user_getfavorites_url">http://10.0.2.2:8080/gymTimeService/getUserFavorites</string>
     <string name="title_activity_base">BaseActivity</string>
+    <string name="gym_add_comments_url">http://10.0.2.2:8080/gymTimeService/addComment</string>
+
     <string name="gym_bundle">gymBundle</string>
     <string name="title_activity_gym_detail_tabbed">GymDetailTabbedActivity</string>
     <string name="section_format">Hello World from section: %1$d</string>

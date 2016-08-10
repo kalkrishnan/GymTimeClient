@@ -23,10 +23,11 @@ public class GymCommentAdapter extends ArrayAdapter<String> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         String comment = getItem(position);
+
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_gym_comment, parent, false);
         }
-        Log.d(GymCommentAdapter.class.getCanonicalName(),"Comment: "+comment);
+        Log.d(GymCommentAdapter.class.getCanonicalName(), "Comment: " + comment);
         TextView gymComment = (TextView) convertView.findViewById(R.id.gym_comment);
         gymComment.setText(comment);
 
@@ -41,7 +42,7 @@ public class GymCommentAdapter extends ArrayAdapter<String> {
     @Override
     public int getViewTypeCount() {
 
-        return 100;
+        return 1000;
     }
 
     @Override
