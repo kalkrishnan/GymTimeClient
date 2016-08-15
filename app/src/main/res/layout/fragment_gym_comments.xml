@@ -14,22 +14,40 @@
             android:id="@+id/gym_comments"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/colorSemiTransparent"
             android:layout_weight="1"
-            android:fastScrollAlwaysVisible="true"
-            />
+            android:background="@color/colorSemiTransparent"
+            android:fastScrollAlwaysVisible="true" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/comment_text"
-                android:layout_width="100dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/comment_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/colorAccent" />
+
+                <ImageView
+                    android:id="@+id/user_comment_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/comment_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/camera"
+                android:background="@null"/>
 
             <Button
                 android:id="@+id/comment_send"

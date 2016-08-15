@@ -2,33 +2,29 @@ package layout;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.gymtime.kalyank.gymtime.GymCommentAdapter;
-import com.gymtime.kalyank.gymtime.GymDetailActivity;
-import com.gymtime.kalyank.gymtime.GymDetailPagerAdapter;
-import com.gymtime.kalyank.gymtime.GymDetailTabs;
-import com.gymtime.kalyank.gymtime.GymListFragment;
 import com.gymtime.kalyank.gymtime.R;
 import com.gymtime.kalyank.gymtime.common.Constants;
 import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
 import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
+import com.gymtime.kalyank.gymtime.dao.Comment;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 import com.gymtime.kalyank.gymtime.session.SessionManager;
-import com.mobsandgeeks.adapters.CircularListAdapter;
+import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
+import com.nguyenhoanglam.imagepicker.model.Image;
 
-import java.security.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,10 +33,14 @@ import java.util.HashMap;
 public class GymCommentsFragment extends Fragment {
 
     EditText commentText;
+    ImageView commentImage;
     ListView gymComments;
+    byte[] imageBytes;
     SessionManager sessionManager = new SessionManager();
-    public ArrayList<String> comments = new ArrayList<String>();
+    public ArrayList<Comment> comments = new ArrayList<Comment>();
     private GymCommentAdapter commentAdapter;
+    private int REQUEST_CODE_PICKER = 2000;
+    private ArrayList<Image> commentImages = new ArrayList<>();
 
     public static GymCommentsFragment newInstance(Gym gym) {
         Bundle bundles = new Bundle();
@@ -62,18 +62,31 @@ public class GymCommentsFragment extends Fragment {
         commentAdapter = new GymCommentAdapter(this.getContext(), comments);
         commentAdapter.addAll(comments);
         gymComments.setAdapter(commentAdapter);
+        ImageButton picButton = ((ImageButton) rootView.findViewById(R.id.comment_image_button));
+
+        picButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(GymCommentsFragment.this.getContext(), ImagePickerActivity.class);
+                intent.putExtra(ImagePickerActivity.INTENT_EXTRA_MODE, ImagePickerActivity.MODE_SINGLE);
+                intent.putExtra(ImagePickerActivity.INTENT_EXTRA_LIMIT, 1);
+                intent.putExtra(ImagePickerActivity.INTENT_EXTRA_SHOW_CAMERA, true);
+                intent.putExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES, commentImages);
+                startActivityForResult(intent, REQUEST_CODE_PICKER);
+            }
+        });
         Button gymButton = ((Button) rootView.findViewById(R.id.comment_send));
         commentText = (EditText) rootView.findViewById(R.id.comment_text);
+        commentImage = (ImageView) rootView.findViewById(R.id.user_comment_image);
         gymButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 final String comment = commentText.getText().toString();
-                commentText.getText().clear();
-                Log.d(GymCommentsFragment.class.getCanonicalName(), "Adding Comment: " + comment);
                 if (comments.size() == commentAdapter.getViewTypeCount())
                     comments.remove(0);
-                comments.add(comment);
+                comments.add(new Comment(comment, "@user", new Date().toString(), imageBytes));
+                clearResources();
                 new CommunicationTask(new CommunicationTask.CommunicationResponse() {
                     @Override
                     public void processFinish(String output) {
@@ -92,12 +105,27 @@ public class GymCommentsFragment extends Fragment {
         return rootView;
     }
 
-//    // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+    private void clearResources() {
+        commentText.getText().clear();
+        commentImage.setImageResource(android.R.color.transparent);
+        commentImage.setVisibility(View.GONE);
+        imageBytes =null;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE_PICKER && resultCode == ImagePickerActivity.RESULT_OK && data != null) {
+            commentImages = data.getParcelableArrayListExtra(ImagePickerActivity.INTENT_EXTRA_SELECTED_IMAGES);
+            for (int i = 0, l = commentImages.size(); i < l; i++) {
+                final Bitmap imageBitmap = GymTimeHelper.getBitmapFromPath(commentImages.get(i).getPath());
+                commentImage.setImageBitmap(imageBitmap);
+                imageBytes = GymTimeHelper.getBytesFromBitmap(imageBitmap);
+            }
+            commentImage.setVisibility(View.VISIBLE);
+            // commentText.setVisibility(View.GONE);
+
+        }
+    }
 
     @Override
     public void onAttach(Context context) {
