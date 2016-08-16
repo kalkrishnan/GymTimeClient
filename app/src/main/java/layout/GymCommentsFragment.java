@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -86,7 +88,7 @@ public class GymCommentsFragment extends Fragment {
                 if (comments.size() == commentAdapter.getViewTypeCount())
                     comments.remove(0);
                 comments.add(new Comment(comment, "@user", new Date().toString(), imageBytes));
-                clearResources();
+
                 new CommunicationTask(new CommunicationTask.CommunicationResponse() {
                     @Override
                     public void processFinish(String output) {
@@ -97,9 +99,11 @@ public class GymCommentsFragment extends Fragment {
                                 new HashMap.SimpleEntry<String, String>("gymId", GymTimeHelper.generateId(gym)),
                                 new HashMap.SimpleEntry<String, String>("userId", sessionManager.getPreference(getContext(), Constants.USER_ID.toString())),
                                 new HashMap.SimpleEntry<String, String>("comment", comment),
+                                new HashMap.SimpleEntry<String, String>("commentImage", imageBytes == null ? "" : Base64.encodeToString(imageBytes, Base64.DEFAULT)),
                                 new HashMap.SimpleEntry<String, String>("timestamp", new Date().toString()));
 
                 commentAdapter.notifyDataSetChanged();
+                clearResources();
             }
         });
         return rootView;
@@ -109,7 +113,7 @@ public class GymCommentsFragment extends Fragment {
         commentText.getText().clear();
         commentImage.setImageResource(android.R.color.transparent);
         commentImage.setVisibility(View.GONE);
-        imageBytes =null;
+        imageBytes = null;
     }
 
     @Override
@@ -120,6 +124,7 @@ public class GymCommentsFragment extends Fragment {
                 final Bitmap imageBitmap = GymTimeHelper.getBitmapFromPath(commentImages.get(i).getPath());
                 commentImage.setImageBitmap(imageBitmap);
                 imageBytes = GymTimeHelper.getBytesFromBitmap(imageBitmap);
+
             }
             commentImage.setVisibility(View.VISIBLE);
             // commentText.setVisibility(View.GONE);

@@ -79,7 +79,7 @@ public class GymTimeHelper {
 
     public static byte[] getBytesFromBitmap(Bitmap imageBitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        imageBitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
         return stream.toByteArray();
     }
 
