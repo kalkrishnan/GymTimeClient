@@ -3,19 +3,22 @@ package com.gymtime.kalyank.gymtime.dao;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.common.primitives.Doubles;
+
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class Gym implements Parcelable, Serializable{
+public class Gym implements Parcelable, Serializable {
 
     private final String latLong;
     private final String name;
     private final String address;
-    private final List<GeneralTraffic> traffic;
- //   private final Boolean favorite;
+    private final List<Double> traffic;
+    //   private final Boolean favorite;
 
-    public Gym(String latLong, String name, String address, List<GeneralTraffic> traffic) {
+    public Gym(String latLong, String name, String address, List<Double> traffic) {
 
         this.latLong = latLong;
         this.name = name;
@@ -29,8 +32,9 @@ public class Gym implements Parcelable, Serializable{
         latLong = in.readString();
         name = in.readString();
         address = in.readString();
-        traffic = new ArrayList<>();
-        in.readTypedList(traffic, GeneralTraffic.CREATOR);
+        double[] _traffic = in.createDoubleArray();
+        traffic = Doubles.asList(_traffic);
+        ;
         //favorite = in.readByte() != 0;
     }
 
@@ -58,7 +62,7 @@ public class Gym implements Parcelable, Serializable{
         return address;
     }
 
-    public List<GeneralTraffic> getTraffic() {
+    public List<Double> getTraffic() {
         return traffic;
     }
 
@@ -72,6 +76,16 @@ public class Gym implements Parcelable, Serializable{
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (o == null) return false;
+        if (o instanceof Gym) {
+            Gym gym = (Gym) o;
+            return this.getName().equals(gym.getName()) & this.getAddress().equals(gym.getAddress()) & this.getLatLong().equals(gym.getLatLong()) & this.getTraffic().equals(gym.getTraffic());
+        }
+        return false;
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
@@ -81,7 +95,7 @@ public class Gym implements Parcelable, Serializable{
         dest.writeString(latLong);
         dest.writeString(name);
         dest.writeString(address);
-        dest.writeTypedList(traffic);
+        dest.writeDoubleArray(Doubles.toArray(traffic));
         //dest.writeByte((byte) (favorite ? 1 : 0));
     }
 }

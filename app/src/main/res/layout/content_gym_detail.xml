@@ -5,6 +5,6 @@
     android:name="com.gymtime.kalyank.gymtime.GymListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gym"
+    android:background="@drawable/gymtime_2"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:layout="@layout/fragment_gym_detail" />

@@ -5,5 +5,5 @@ package com.gymtime.kalyank.gymtime.common;
  */
 public enum Constants {
 
-    USER_ID, FAVORITE_GYM_IDS;
+    USER_ID, FAVORITE_GYM_IDS, USER;
 }

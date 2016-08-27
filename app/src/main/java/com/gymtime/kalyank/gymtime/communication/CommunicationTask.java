@@ -16,15 +16,34 @@ public class CommunicationTask extends AsyncTask<Map.Entry, Void, String> {
 
     public CommunicationResponse delegate = null;
 
-    public CommunicationTask(CommunicationResponse delegate){
+    public CommunicationTask(CommunicationResponse delegate) {
         this.delegate = delegate;
     }
 
     @Override
     protected String doInBackground(Map.Entry... urls) {
 
-        return HTTPClient.getData(urls).getMessage();
+        final String method = urls[0].getValue().toString();
+        switch (method) {
+            case "GET":
+                return HTTPClient.getData(urls).getMessage();
+            case "POST":
 
+                return callHTTPPost(urls);
+
+        }
+        return null;
+    }
+
+    private String callHTTPPost(Map.Entry... urls) {
+        String body = "{";
+        for (int i = 2; i < urls.length; i++) {
+            Map.Entry part = urls[i];
+            body += "\"" + part.getKey() + "\":\"" + part.getValue() + "\",";
+        }
+        body = body.substring(0, body.length() - 1);
+        body += "}";
+        return HTTPClient.postData(urls[1].getValue().toString(), body).getMessage();
     }
 
     @Override

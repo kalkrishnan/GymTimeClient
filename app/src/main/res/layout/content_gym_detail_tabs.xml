@@ -10,7 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.gymtime.kalyank.gymtime.GymDetailTabs"
-    android:background="@drawable/gym"
+    android:background="@drawable/gymtime_2"
     tools:showIn="@layout/activity_gym_detail_tabs">
 
     <android.support.v7.widget.Toolbar

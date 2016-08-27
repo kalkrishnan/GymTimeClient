@@ -67,7 +67,7 @@ public class GymTrafficFragment extends Fragment implements TimePickerFragment.O
         gymDistance.setText(getDistance(gym.getLatLong()));
 
         RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
-        ratingBar.setRating((float) gym.getTraffic().get(0).getHowHeavyTrafficIs());
+        ratingBar.setRating(gym.getTraffic().get(0).floatValue());
 
 //        SpeedometerGauge speedometer = (SpeedometerGauge) rootView.findViewById(R.id.trafficmeter);
 //        speedometer.setLabelConverter(new SpeedometerGauge.LabelConverter() {
@@ -85,11 +85,10 @@ public class GymTrafficFragment extends Fragment implements TimePickerFragment.O
 //        speedometer.addColoredRange(0, 35, Color.GREEN);
 //        speedometer.addColoredRange(35 , 70, Color.YELLOW);
 //        speedometer.addColoredRange(70, 100, Color.RED);
-//        speedometer.setSpeed((float)gym.getTraffic().get(0).getHowHeavyTrafficIs()*100);
+//        speedometer.setSpeed((float)gym.getTraffic().get(0).getHowHeavyTraffic()*100);
         return rootView;
 
     }
-
 
 
     private String getDistance(String latLong) {

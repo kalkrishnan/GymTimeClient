@@ -4,7 +4,7 @@
     <string name="action_logout">Logout</string>
     <string name="view_location_id">location</string>
     <string name="title_activity_gym_detail">Gyms Near Your Location</string>
-    <string name="gym_service_url">http://10.0.2.2:8080/gymTimeService/searchGyms</string>
+    <string name="gym_service_url">http://10.0.2.2:8080/searchGyms</string>
     <string name="search_hint">Location</string>
     <string name="menu_search">Search</string>
     <string name="traffic_label">Traffic</string>
@@ -14,13 +14,14 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="gym_login_url">http://10.0.2.2:8080/gymTimeService/login</string>
-    <string name="gym_signup_url">http://10.0.2.2:8080/gymTimeService/signup</string>
+    <string name="gym_login_url">http://10.0.2.2:8080/user/search/findByEmailAndPassword</string>
+    <string name="gym_signup_url">http://10.0.2.2:8080/user</string>
     <string name="gym_favorite_url">http://10.0.2.2:8080/gymTimeService/addToFavorites</string>
     <string name="gym_unfavorite_url">http://10.0.2.2:8080/gymTimeService/removeFromFavorites</string>
     <string name="user_getfavorites_url">http://10.0.2.2:8080/gymTimeService/getUserFavorites</string>
     <string name="title_activity_base">BaseActivity</string>
-    <string name="gym_add_comments_url">http://10.0.2.2:8080/gymTimeService/addComment</string>
+    <string name="gym_comments_url">http://10.0.2.2:8080/comments/search/findByGymId</string>
+    <string name="gym_add_comments_url">http://10.0.2.2:8080/comments</string>
 
     <string name="gym_bundle">gymBundle</string>
     <string name="title_activity_gym_detail_tabbed">GymDetailTabbedActivity</string>

@@ -15,7 +15,7 @@ import android.view.View;
 
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
-public class GymDetailTabs extends AppCompatActivity {
+public class GymDetailTabs extends BaseActivity {
 
     @Override
 

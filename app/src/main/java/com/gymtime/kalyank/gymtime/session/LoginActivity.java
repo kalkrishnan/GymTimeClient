@@ -1,18 +1,32 @@
 package com.gymtime.kalyank.gymtime.session;
 
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fivehundredpx.android.blur.BlurringView;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.gymtime.kalyank.gymtime.GymTimeActivity;
 import com.gymtime.kalyank.gymtime.R;
 import com.gymtime.kalyank.gymtime.common.Constants;
@@ -20,11 +34,13 @@ import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
 import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
 import com.gymtime.kalyank.gymtime.communication.HTTPResponse;
-import com.gymtime.kalyank.gymtime.dao.Gym;
+import com.gymtime.kalyank.gymtime.dao.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     private String gymJson;
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,24 +69,36 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         ButterKnife.setDebug(true);
+        final LinearLayout root = (LinearLayout) findViewById(R.id.login_view);
+        BlurringView blurringView = (BlurringView) findViewById(R.id.blurring_view);
+        blurringView.setBlurredView(root);
 
-        _loginButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
+        _loginButton.setOnClickListener(new View.OnClickListener()
 
-        _signupLink.setOnClickListener(new View.OnClickListener() {
+                                        {
 
-            @Override
-            public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-            }
-        });
+                                            @Override
+                                            public void onClick(View v) {
+                                                login();
+                                            }
+                                        }
+
+        );
+
+        _signupLink.setOnClickListener(new View.OnClickListener()
+
+                                       {
+
+                                           @Override
+                                           public void onClick(View v) {
+                                               // Start the Signup activity
+                                               Intent intent = new Intent(getApplicationContext(), SignUpActivity.class);
+                                               startActivityForResult(intent, REQUEST_SIGNUP);
+                                           }
+                                       }
+
+        );
     }
 
     public void login() {
@@ -86,7 +115,8 @@ public class LoginActivity extends AppCompatActivity {
 
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
-        new LoginTask().execute(new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_login_url)),
+        new LoginTask().execute(new HashMap.SimpleEntry<String, String>("method", "GET"),
+                new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_login_url)),
                 new HashMap.SimpleEntry<String, String>("email", email),
                 new HashMap.SimpleEntry<String, String>("password", password));
 
@@ -102,11 +132,11 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(HTTPResponse response) {
-            if (response.getMessage().toString().equals(getString(R.string.invalid_login_credentials))) {
+            if (response.getCode() == HttpsURLConnection.HTTP_NOT_FOUND) {
                 Log.d(LoginActivity.TAG, response.getMessage());
                 onLoginFailed(response.getMessage());
             } else {
-                generateUserId(response.getMessage());
+                onLoginSuccess(response.getMessage());
 
             }
         }
@@ -114,26 +144,20 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void generateUserId(String _userId) {
-        userId = _userId;
-        new CommunicationTask(new CommunicationTask.CommunicationResponse() {
-            @Override
-            public void processFinish(String output) {
-                gymJson = output;
-                _loginButton.setEnabled(true);
-                progressDialog.dismiss();
-                sessionManager.setPreference(LoginActivity.this, Constants.USER_ID.toString(), userId);
-                Intent myIntent = new Intent(LoginActivity.this, GymTimeActivity.class);
-                Bundle bundle = new Bundle();
-                final ArrayList<Gym> listGyms = GymTimeHelper.parseGyms(gymJson);
-                sessionManager.setPreferences(LoginActivity.this, Constants.FAVORITE_GYM_IDS.toString(), GymTimeHelper.generateFavoriteGymIds(listGyms));
-                bundle.putParcelableArrayList(getString(R.string.gym_bundle), listGyms);
-                myIntent.putExtras(bundle);
-                LoginActivity.this.startActivity(myIntent);
-                finish();
-            }
-        }).execute(new HashMap.SimpleEntry<String, String>("url", getString(R.string.user_getfavorites_url)),
-                new HashMap.SimpleEntry<String, String>("userId", userId));
+    private void onLoginSuccess(String _user) {
+        Gson gson = new GsonBuilder().create();
+        User user = gson.fromJson(_user, User.class);
+        Log.d(LoginActivity.class.getCanonicalName(), _user);
+        Log.d(LoginActivity.class.getCanonicalName(), new GsonBuilder().create().toJson(user));
+        _loginButton.setEnabled(true);
+        progressDialog.dismiss();
+        sessionManager.setPreference(LoginActivity.this, Constants.USER.toString(), _user);
+        Intent myIntent = new Intent(LoginActivity.this, GymTimeActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(getString(R.string.gym_bundle), (ArrayList) user.getFavorites());
+        myIntent.putExtras(bundle);
+        LoginActivity.this.startActivity(myIntent);
+        finish();
 
     }
 
@@ -142,9 +166,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_SIGNUP) {
             if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
                 this.finish();
             }
         }
@@ -152,7 +173,6 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Disable going back to the MainActivity
         moveTaskToBack(true);
     }
 

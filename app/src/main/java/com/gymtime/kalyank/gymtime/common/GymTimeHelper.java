@@ -5,18 +5,20 @@ import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.common.primitives.Bytes;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.gymtime.kalyank.gymtime.dao.GeneralTraffic;
+
+import android.util.Base64;
+
+import com.gymtime.kalyank.gymtime.dao.Comment;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.io.ByteArrayOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.Collections;
 
 /**
  * Created by kalyanak on 7/26/2016.
@@ -38,21 +40,15 @@ public class GymTimeHelper {
         return gyms;
     }
 
-    private static Gym parseGym(JsonObject gymJson) {
+    private static Gym parseGym(final JsonObject gymJson) {
 
         String name = gymJson.get("name").toString().replace("\"", "");
         String address = gymJson.get("address").toString().replace("\"", "");
-        String latLong = gymJson.get("id").toString().replace("\"", "");
-        final double trafficStrength = parseTrafficStrength(gymJson.get("traffic").getAsJsonArray().get(0).getAsJsonObject());
-
+        String latLong = gymJson.get("latLong").toString().replace("\"", "");
+        Log.d(GymTimeHelper.class.getCanonicalName(), latLong);
         return new Gym(latLong, name, address, new ArrayList() {{
-            add(new GeneralTraffic(trafficStrength));
+            add(Double.parseDouble(gymJson.get("traffic").getAsJsonArray().get(0).getAsString()));
         }});
-    }
-
-
-    private static double parseTrafficStrength(JsonObject traffic) {
-        return traffic.get("trafficStrength").getAsDouble();
     }
 
 
@@ -87,4 +83,38 @@ public class GymTimeHelper {
         return BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length);
 
     }
+
+    public static Collection<? extends Comment> parseComments(String output) {
+        if (output != null) {
+            JsonElement jelement = new JsonParser().parse(output);
+            JsonObject jobject;
+            jelement = jelement.getAsJsonObject().getAsJsonObject("_embedded").getAsJsonArray("comments");
+            if (jelement.isJsonArray()) {
+                JsonArray jarray = jelement.getAsJsonArray();
+                ArrayList<Comment> gyms = new ArrayList<Comment>();
+                for (JsonElement jsonElement : jarray) {
+
+                    jobject = jsonElement.getAsJsonObject();
+                    gyms.add(parseComment(jobject));
+
+                }
+                return gyms;
+            }
+            return Collections.EMPTY_LIST;
+        }
+        return Collections.EMPTY_LIST;
+    }
+
+    private static Comment parseComment(JsonObject commentJson) {
+
+        String comment = commentJson.get("comment").toString().replace("\"", "");
+        String userId = commentJson.get("userId").toString().replace("\"", "");
+        String time = commentJson.get("time").toString().replace("\"", "");
+        Log.d(GymTimeHelper.class.getCanonicalName(), commentJson.get("commentImage").toString());
+        byte[] commentImage = commentJson.get("commentImage").toString().isEmpty() ? null : Base64.decode(commentJson.get("commentImage").toString().replace("\"", ""),
+        Base64.NO_WRAP | Base64.URL_SAFE);
+
+        return new Comment(comment, userId, time, commentImage);
+    }
+
 }

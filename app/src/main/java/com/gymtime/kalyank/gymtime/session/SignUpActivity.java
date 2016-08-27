@@ -14,8 +14,10 @@ import android.widget.Toast;
 
 import com.gymtime.kalyank.gymtime.GymTimeActivity;
 import com.gymtime.kalyank.gymtime.R;
+import com.gymtime.kalyank.gymtime.common.Constants;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
 import com.gymtime.kalyank.gymtime.communication.HTTPResponse;
+import com.gymtime.kalyank.gymtime.dao.User;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +28,6 @@ import butterknife.ButterKnife;
 public class SignUpActivity extends AppCompatActivity {
     private static final String TAG = "SignupActivity";
     SessionManager sessionManager;
-    private String userId;
     @BindView(R.id.input_name)
     EditText _nameText;
     @BindView(R.id.input_email)
@@ -63,8 +64,9 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
 
-    private void generateUserId(String _userId) {
-        userId = _userId;
+    private void storeUser(String _user) {
+        sessionManager.setPreference(SignUpActivity.this, Constants.USER.toString(), _user);
+
     }
 
     public String signup() {
@@ -84,7 +86,8 @@ public class SignUpActivity extends AppCompatActivity {
         String email = _emailText.getText().toString();
         String password = _passwordText.getText().toString();
 
-        new SignUpTask().execute(new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_signup_url)),
+        new SignUpTask().execute(
+                new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_signup_url)),
                 new HashMap.SimpleEntry<String, String>("name", name),
                 new HashMap.SimpleEntry<String, String>("email", email),
                 new HashMap.SimpleEntry<String, String>("password", password));
@@ -97,20 +100,19 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected HTTPResponse doInBackground(Map.Entry... urls) {
 
-            return HTTPClient.getData(urls);
+            return HTTPClient.postData(urls[0].getValue().toString(), "{\"name\":\"" + urls[1].getValue().toString() + "\",\"email\":\"" + urls[2].getValue().toString() + "\",\"password\":\"" + urls[3].getValue().toString() + "\"}");
         }
 
         @Override
         protected void onPostExecute(HTTPResponse response) {
 
             Log.d(SignUpActivity.class.getCanonicalName(), response.getMessage());
-            Log.d(SignUpActivity.class.getCanonicalName(), getString(R.string.email_already_exists));
             if (response.getMessage().toString().equals(getString(R.string.email_already_exists))) {
                 Log.d(SignUpActivity.TAG, response.getMessage());
                 onSignupFailed(response.getMessage());
 
             } else {
-                generateUserId(response.getMessage());
+                storeUser(response.getMessage());
                 onSignupSuccess();
             }
         }
@@ -121,7 +123,6 @@ public class SignUpActivity extends AppCompatActivity {
         _signupButton.setEnabled(true);
         progressDialog.dismiss();
         setResult(RESULT_OK, null);
-        sessionManager.setPreference(SignUpActivity.this, "userId", userId);
         Intent intent = new Intent(SignUpActivity.this, GymTimeActivity.class);
         intent.putExtra(Intent.EXTRA_TEXT, "");
         startActivity(intent);
