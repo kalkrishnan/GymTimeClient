@@ -1,7 +1,6 @@
 package com.gymtime.kalyank.gymtime;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
 import com.gymtime.kalyank.gymtime.dao.Comment;
 
-import java.io.File;
 import java.util.List;
 
 /**
@@ -35,7 +33,7 @@ public class GymCommentAdapter extends ArrayAdapter<Comment> {
         TextView gymComment = (TextView) convertView.findViewById(R.id.gym_comment);
         gymComment.setText(comment.getComment());
         TextView commentUser = (TextView) convertView.findViewById(R.id.comment_user);
-        commentUser.setText(comment.getUser());
+        commentUser.setText(comment.getUserId());
         TextView commentTime = (TextView) convertView.findViewById(R.id.comment_time);
         commentTime.setText(comment.getTime());
         final byte[] imageBytes = comment.getCommentImageBytes();

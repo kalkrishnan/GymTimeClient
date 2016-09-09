@@ -9,9 +9,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fivehundredpx.android.blur.BlurringView;
 import com.gymtime.kalyank.gymtime.GymTimeActivity;
 import com.gymtime.kalyank.gymtime.R;
 import com.gymtime.kalyank.gymtime.common.Constants;
@@ -46,7 +48,9 @@ public class SignUpActivity extends AppCompatActivity {
         sessionManager = new SessionManager();
         setContentView(R.layout.activity_signup);
         ButterKnife.bind(this);
-
+        final LinearLayout root = (LinearLayout) findViewById(R.id.signup_view);
+        BlurringView blurringView = (BlurringView) findViewById(R.id.signup_blurringview);
+        blurringView.setBlurredView(root);
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

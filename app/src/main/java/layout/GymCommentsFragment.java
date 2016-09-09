@@ -1,5 +1,6 @@
 package layout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -29,11 +30,17 @@ import com.gymtime.kalyank.gymtime.session.SessionManager;
 import com.nguyenhoanglam.imagepicker.activity.ImagePickerActivity;
 import com.nguyenhoanglam.imagepicker.model.Image;
 
+import org.java_websocket.WebSocket;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+
+import rx.functions.Action1;
+import ua.naiksoftware.stomp.Stomp;
+import ua.naiksoftware.stomp.client.StompClient;
+import ua.naiksoftware.stomp.client.StompMessage;
 
 
 public class GymCommentsFragment extends Fragment {
@@ -47,6 +54,7 @@ public class GymCommentsFragment extends Fragment {
     private GymCommentAdapter commentAdapter;
     private int REQUEST_CODE_PICKER = 2000;
     private ArrayList<Image> commentImages = new ArrayList<>();
+    private StompClient mStompClient;
 
     public static GymCommentsFragment newInstance(Gym gym) {
         Bundle bundles = new Bundle();
@@ -70,7 +78,7 @@ public class GymCommentsFragment extends Fragment {
         commentAdapter.addAll(comments);
         gymComments.setAdapter(commentAdapter);
         ImageButton picButton = ((ImageButton) rootView.findViewById(R.id.comment_image_button));
-
+        registerObservable(gym.getLatLong());
         picButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -116,6 +124,27 @@ public class GymCommentsFragment extends Fragment {
         return rootView;
     }
 
+    private void registerObservable(String gymId) {
+        mStompClient = Stomp.over(WebSocket.class, "ws://10.0.2.2:8080/messages/websocket");
+        mStompClient.connect();
+        mStompClient.topic("/topic/comments/"+gymId).subscribe(new Action1<StompMessage>() {
+
+            @Override
+            public void call(StompMessage stompMessage) {
+                final Comment comment = new GsonBuilder().create().fromJson(stompMessage.getPayload(), Comment.class);
+                Log.d(GymCommentsFragment.class.getCanonicalName(), comment.getComment());
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        comments.add(comment);
+                        commentAdapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
+    }
+
     private void clearResources() {
         commentText.getText().clear();
         commentImage.setImageResource(android.R.color.transparent);
@@ -131,7 +160,6 @@ public class GymCommentsFragment extends Fragment {
                 final Bitmap imageBitmap = GymTimeHelper.getBitmapFromPath(commentImages.get(i).getPath());
                 commentImage.setImageBitmap(imageBitmap);
                 imageBytes = GymTimeHelper.getBytesFromBitmap(imageBitmap);
-                Log.d(GymCommentsFragment.class.getCanonicalName(), Base64.encodeToString(imageBytes, Base64.DEFAULT));
             }
             commentImage.setVisibility(View.VISIBLE);
             // commentText.setVisibility(View.GONE);
@@ -155,7 +183,6 @@ public class GymCommentsFragment extends Fragment {
             @Override
             public void processFinish(String output) {
                 final Collection<? extends Comment> latestComments = GymTimeHelper.parseComments(output);
-                Log.d(GymCommentsFragment.class.getCanonicalName(), Arrays.toString(latestComments.toArray()));
                 comments.addAll(latestComments);
             }
         }).execute

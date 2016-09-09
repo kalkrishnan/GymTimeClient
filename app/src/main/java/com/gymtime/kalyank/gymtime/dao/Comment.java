@@ -8,13 +8,13 @@ import java.io.Serializable;
 public class Comment implements Serializable {
 
     private final String comment;
-    private final String user;
+    private final String userId;
     private final String time;
     private final byte[] commentImageBytes;
 
     public Comment(String _comment, String _user, String _time, byte[] _commentImagePath) {
         this.comment = _comment;
-        this.user = _user;
+        this.userId = _user;
         this.time = _time;
         this.commentImageBytes = _commentImagePath;
     }
@@ -31,8 +31,8 @@ public class Comment implements Serializable {
         return time;
     }
 
-    public String getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
     public byte[] getCommentImageBytes() {
