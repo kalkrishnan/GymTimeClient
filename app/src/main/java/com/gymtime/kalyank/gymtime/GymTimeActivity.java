@@ -3,14 +3,18 @@ package com.gymtime.kalyank.gymtime;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 
+import com.fivehundredpx.android.blur.BlurringView;
 import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
 import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 
@@ -27,10 +31,16 @@ public class GymTimeActivity extends BaseActivity {
         setContentView(R.layout.activity_gym_time);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        final LinearLayout root = (LinearLayout) findViewById(R.id.gymtime_view);
+        BlurringView blurringView = (BlurringView) findViewById(R.id.gymtime_blurringview);
+        blurringView.setBlurredView(root);
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) findViewById(R.id.menu_search);
+        int id = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        TextView textView = (TextView) searchView.findViewById(id);
+        textView.setTextColor(Color.WHITE);
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
 

@@ -34,8 +34,10 @@ import org.java_websocket.WebSocket;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import rx.functions.Action1;
 import ua.naiksoftware.stomp.Stomp;
@@ -50,7 +52,7 @@ public class GymCommentsFragment extends Fragment {
     ListView gymComments;
     byte[] imageBytes;
     SessionManager sessionManager = new SessionManager();
-    public ArrayList<Comment> comments = new ArrayList<Comment>();
+    public List<Comment> comments = Collections.synchronizedList(new ArrayList<Comment>());
     private GymCommentAdapter commentAdapter;
     private int REQUEST_CODE_PICKER = 2000;
     private ArrayList<Image> commentImages = new ArrayList<>();

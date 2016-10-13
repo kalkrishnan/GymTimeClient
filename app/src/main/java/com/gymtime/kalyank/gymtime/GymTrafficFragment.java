@@ -1,9 +1,16 @@
 package com.gymtime.kalyank.gymtime;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.content.AsyncQueryHandler;
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.pm.PackageManager;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,9 +21,17 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.google.gson.GsonBuilder;
+import com.gymtime.kalyank.gymtime.common.Constants;
+import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
+import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.dao.Gym;
+import com.gymtime.kalyank.gymtime.dao.User;
+import com.gymtime.kalyank.gymtime.session.SessionManager;
 
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 
 
 /**
@@ -27,8 +42,10 @@ import java.text.DecimalFormat;
  * Use the {@link GymTrafficFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GymTrafficFragment extends Fragment implements TimePickerFragment.OnTimerSelectionListener {
+public class GymTrafficFragment extends Fragment {
 
+
+    private Gym gym;
 
     public static GymTrafficFragment newInstance(Gym gym) {
         Bundle bundles = new Bundle();
@@ -43,16 +60,18 @@ public class GymTrafficFragment extends Fragment implements TimePickerFragment.O
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        Bundle bundle = getArguments();
-        Gym gym = (Gym) bundle.getSerializable("gym");
+        final Bundle bundle = getArguments();
+        gym = (Gym) bundle.getSerializable("gym");
 
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_gym_traffic, null);
         Button timerButton = (Button) rootView.findViewById(R.id.check_in);
+
         timerButton.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.M)
             @Override
             public void onClick(View v) {
                 DialogFragment timePickerFragment = new TimePickerFragment();
+                timePickerFragment.setArguments(bundle);
                 getChildFragmentManager().beginTransaction().add(timePickerFragment, timePickerFragment.getTag()).commit();
                 timePickerFragment.show(getFragmentManager(), "timePicker");
 
@@ -100,14 +119,11 @@ public class GymTrafficFragment extends Fragment implements TimePickerFragment.O
         Double endLat = Double.parseDouble(latLong.split("_")[0]);
         Double endLong = Double.parseDouble(latLong.split("_")[1]);
 
-        Location gym = new Location("Gym");
-        gym.setLatitude(endLat);
-        gym.setLongitude(endLong);
-        return twoDForm.format(gym.distanceTo(home) / 1600) + "mi";
+        Location gymLocation = new Location("Gym");
+        gymLocation.setLatitude(endLat);
+        gymLocation.setLongitude(endLong);
+        return twoDForm.format(gymLocation.distanceTo(home) / 1600) + "mi";
     }
 
-    @Override
-    public void onTimerSelection(int hourOfDay, int minute) {
-        Log.d(GymTrafficFragment.class.getCanonicalName(), "HOUR: " + hourOfDay + " MINUTE: " + minute);
-    }
+
 }

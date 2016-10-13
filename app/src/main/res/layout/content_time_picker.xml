@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    tools:context="com.gymtime.kalyank.gymtime.TimePickerFragment">
+
+    <TextView
+        android:id="@+id/checkin_text"
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        style="@style/GymTimeLabelBig"
+         />
+
+    <TextView
+        android:id="@+id/reminder_label"
+
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:textSize="14sp"
+        android:textColor="@color/colorAccent"
+        android:textStyle="italic"
+        android:text="Set Reminder" />
+
+    <Spinner
+        android:id="@+id/checkin_reminder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/colorAccent"
+        android:background="@color/white"
+        android:overlapAnchor="false"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkin_done_button"
+            android:layout_weight="1"
+            android:text="Done"/>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/checkin_cancel_button"
+            android:layout_weight="1"
+            android:text="Cancel"/>
+    </LinearLayout>
+</LinearLayout>

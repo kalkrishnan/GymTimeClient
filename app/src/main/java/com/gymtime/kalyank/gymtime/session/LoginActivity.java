@@ -123,8 +123,7 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(HTTPResponse response) {
             if (response.getCode() == HttpsURLConnection.HTTP_NOT_FOUND) {
-                Log.d(LoginActivity.TAG, response.getMessage());
-                onLoginFailed(response.getMessage());
+                onLoginFailed(getString(R.string.EMAIL_OR_PASSWORD_INVALID));
             } else {
                 onLoginSuccess(response.getMessage());
 
@@ -137,8 +136,6 @@ public class LoginActivity extends AppCompatActivity {
     private void onLoginSuccess(String _user) {
         Gson gson = new GsonBuilder().create();
         User user = gson.fromJson(_user, User.class);
-        Log.d(LoginActivity.class.getCanonicalName(), _user);
-        Log.d(LoginActivity.class.getCanonicalName(), new GsonBuilder().create().toJson(user));
         _loginButton.setEnabled(true);
         progressDialog.dismiss();
         sessionManager.setPreference(LoginActivity.this, Constants.USER.toString(), _user);
@@ -168,6 +165,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void onLoginFailed(String errorMessage) {
+        Log.d(LoginActivity.class.getCanonicalName(), "Error"+errorMessage);
         Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
         progressDialog.dismiss();
         _loginButton.setEnabled(true);

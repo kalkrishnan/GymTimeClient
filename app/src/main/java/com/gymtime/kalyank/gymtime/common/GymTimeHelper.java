@@ -117,4 +117,25 @@ public class GymTimeHelper {
         return new Comment(comment, userId, time, commentImage);
     }
 
+    public static int getReminderTime(String reminderTime) {
+        switch(reminderTime)
+        {
+            case "15 minutes":
+                return 15;
+            case "30 minutes":
+                return 30;
+            case "45 minutes":
+                return 45;
+            case "1 hour":
+                return 60;
+            case "2 hours":
+                return 120;
+            case "12 hours":
+                return 720;
+            case "24 hours":
+                return 1440;
+            default:
+                return 0;
+        }
+    }
 }
