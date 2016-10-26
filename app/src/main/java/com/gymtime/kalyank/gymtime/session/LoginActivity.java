@@ -24,6 +24,7 @@ import com.gymtime.kalyank.gymtime.R;
 import com.gymtime.kalyank.gymtime.common.Constants;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
 import com.gymtime.kalyank.gymtime.communication.HTTPResponse;
+import com.gymtime.kalyank.gymtime.dao.Gym;
 import com.gymtime.kalyank.gymtime.dao.User;
 
 import java.util.ArrayList;
@@ -141,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager.setPreference(LoginActivity.this, Constants.USER.toString(), _user);
         Intent myIntent = new Intent(LoginActivity.this, GymTimeActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(getString(R.string.gym_bundle), (ArrayList) user.getFavorites());
+        bundle.putParcelableArrayList(getString(R.string.gym_bundle), new ArrayList<Gym>(user.getFavorites()));
         myIntent.putExtras(bundle);
         LoginActivity.this.startActivity(myIntent);
         finish();
@@ -165,7 +166,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     public void onLoginFailed(String errorMessage) {
-        Log.d(LoginActivity.class.getCanonicalName(), "Error"+errorMessage);
+        Log.d(LoginActivity.class.getCanonicalName(), "Error" + errorMessage);
         Toast.makeText(getBaseContext(), errorMessage, Toast.LENGTH_LONG).show();
         progressDialog.dismiss();
         _loginButton.setEnabled(true);

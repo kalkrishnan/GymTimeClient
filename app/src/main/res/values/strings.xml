@@ -32,7 +32,7 @@
     <string name="gym_checkin_url">http://10.0.2.2:8080/checkIn</string>
     <string name="no_reminders">no_reminders</string>
     <string-array name="reminder_times">
-        <item/>
+        <item />
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>45 minutes</item>

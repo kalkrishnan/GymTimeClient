@@ -3,55 +3,59 @@ package com.gymtime.kalyank.gymtime;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.gymtime.kalyank.gymtime.common.Constants;
-import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
-import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
-import com.gymtime.kalyank.gymtime.communication.HTTPClient;
 import com.gymtime.kalyank.gymtime.dao.Gym;
-import com.gymtime.kalyank.gymtime.dao.User;
-import com.gymtime.kalyank.gymtime.session.SessionManager;
 
-import java.io.Console;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+
+import layout.FavoriteButtonFragment;
 
 /**
  * Created by kalyank on 2/20/2016.
  */
 public class GymItemAdapter extends ArrayAdapter<Gym> {
-    public GymItemAdapter(Context context, ArrayList<Gym> gyms) {
+
+    GymListFragment parentFragment;
+
+    public GymItemAdapter(GymListFragment _fragment, Context context, ArrayList<Gym> gyms) {
+
         super(context, 0, gyms);
+        parentFragment = _fragment;
     }
 
-    SessionManager sessionManager;
-    List<Gym> updateFavorites = new ArrayList<Gym>();
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         // Get the data item for this position
         final Gym gym = getItem(position);
+        Bundle bundle = new Bundle();
+
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_gym_item, parent, false);
+            int newId = 100000 + position;
+            FrameLayout layout = (FrameLayout) convertView.findViewById(R.id.favorite_button_fragment);
+            layout.setId(newId);
+            convertView.setTag(newId);
+
+            FavoriteButtonFragment fragment = new FavoriteButtonFragment();
+            bundle.putSerializable("gym", gym);
+            fragment.setArguments(bundle);
+            FragmentManager manager = parentFragment.getChildFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(newId, fragment, "" + newId);
+            transaction.commit();
         }
         TextView gymName = (TextView) convertView.findViewById(R.id.gymName);
         TextView gymAddress = (TextView) convertView.findViewById(R.id.gymAddress);
@@ -60,56 +64,8 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
         gymAddress.setText(gym.getAddress());
 
         gymDistance.setText(getDistance(gym.getLatLong()));
-        final String gymId = GymTimeHelper.generateId(gym);
-        sessionManager = new SessionManager();
-        final User user = new GsonBuilder().create().fromJson(sessionManager.getPreference(this.getContext(), Constants.USER.toString()), User.class);
-        final List<Gym> favoriteGyms = user.getFavorites() != null ? user.getFavorites() : new ArrayList<Gym>();
-        final ImageButton gymFavoriteButton = (ImageButton) convertView.findViewById(R.id.favorite);
-        if (favoriteGyms.contains(gym)) {
-            Log.d(GymItemAdapter.class.getCanonicalName(), gym.toString());
-            Log.d(GymItemAdapter.class.getCanonicalName(), favoriteGyms.toString());
-            gymFavoriteButton.setSelected(true);
-            gymFavoriteButton.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_on_pressed, null));
-        }
 
-        gymFavoriteButton.setOnTouchListener(new View.OnTouchListener() {
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
 
-                updateFavorites.addAll(favoriteGyms);
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (!gymFavoriteButton.isSelected()) {
-                        gymFavoriteButton.setSelected(true);
-                        updateFavorites.add(gym);
-                        Log.d(GymItemAdapter.class.getCanonicalName(), "List Gym: " + Arrays.toString(updateFavorites.toArray()));
-                        v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_on_pressed, null));
-
-                    } else {
-                        gymFavoriteButton.setSelected(false);
-                        updateFavorites.remove(gym);
-                        v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_off, null));
-                    }
-                    User updatedUser = User.builder().name(user.getName()).email(user.getEmail()).password(user.getPassword()).favorites(updateFavorites).build();
-                    sessionManager.setPreference(getContext(), Constants.USER.toString(),
-                            new GsonBuilder().create().toJson(updatedUser));
-                    final String userJson = new GsonBuilder().create().toJson(updatedUser);
-                    Log.d(GymItemAdapter.class.getCanonicalName(), userJson);
-                    new CommunicationTask(new CommunicationTask.CommunicationResponse() {
-                        @Override
-                        public void processFinish(String output) {
-
-                        }
-                    }).execute
-                            (new HashMap.SimpleEntry<String, String>("method", "POST"),
-                                    new HashMap.SimpleEntry<String, String>("url", getContext().getString(R.string.gym_signup_url)),
-                                    new HashMap.SimpleEntry<String, String>("user", userJson));
-
-                }
-                return true;
-
-            }
-        });
         return convertView;
     }
 

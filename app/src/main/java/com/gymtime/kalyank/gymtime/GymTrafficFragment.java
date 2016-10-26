@@ -1,19 +1,13 @@
 package com.gymtime.kalyank.gymtime;
 
-import android.Manifest;
 import android.annotation.TargetApi;
-import android.content.AsyncQueryHandler;
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,26 +15,20 @@ import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.google.gson.GsonBuilder;
-import com.gymtime.kalyank.gymtime.common.Constants;
-import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
-import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.dao.Gym;
-import com.gymtime.kalyank.gymtime.dao.User;
-import com.gymtime.kalyank.gymtime.session.SessionManager;
 
-import java.sql.Timestamp;
 import java.text.DecimalFormat;
-import java.util.HashMap;
+
+import layout.FavoriteButtonFragment;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
+ * Activities that contain this parentFragment must implement the
  * {@link GymTrafficFragment} interface
  * to handle interaction events.
  * Use the {@link GymTrafficFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * create an instance of this parentFragment.
  */
 public class GymTrafficFragment extends Fragment {
 
@@ -59,7 +47,7 @@ public class GymTrafficFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this parentFragment
         final Bundle bundle = getArguments();
         gym = (Gym) bundle.getSerializable("gym");
 
@@ -77,6 +65,8 @@ public class GymTrafficFragment extends Fragment {
 
             }
         });
+
+        addFavoriteButton(bundle, gym);
         TextView gymName = (TextView) rootView.findViewById(R.id.gymName);
         TextView gymAddress = (TextView) rootView.findViewById(R.id.gymAddress);
         TextView gymDistance = (TextView) rootView.findViewById(R.id.gymDistance);
@@ -107,6 +97,16 @@ public class GymTrafficFragment extends Fragment {
 //        speedometer.setSpeed((float)gym.getTraffic().get(0).getHowHeavyTraffic()*100);
         return rootView;
 
+    }
+
+    private void addFavoriteButton(Bundle bundle, Gym gym) {
+        FavoriteButtonFragment fragment = new FavoriteButtonFragment();
+        bundle.putSerializable("gym", this.gym);
+        fragment.setArguments(bundle);
+        FragmentManager manager = getChildFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.add(R.id.favorite_button_traffic, fragment);
+        transaction.commit();
     }
 
 

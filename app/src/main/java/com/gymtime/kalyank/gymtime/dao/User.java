@@ -2,7 +2,9 @@ package com.gymtime.kalyank.gymtime.dao;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -13,13 +15,13 @@ public class User implements Serializable {
     private String name;
     private String email;
     private String password;
-    private List<Gym> favorites;
+    private Set<Gym> favorites;
 
     private User(Builder builder) {
         this.name = builder.name;
         this.email = builder.email;
         this.password = builder.password;
-        this.favorites = new ArrayList<Gym>(builder.favorites);
+        this.favorites = new HashSet<Gym>(builder.favorites);
     }
 
     public static Builder builder() {
@@ -30,7 +32,7 @@ public class User implements Serializable {
         private String name;
         private String email;
         private String password;
-        private List<Gym> favorites;
+        private Set<Gym> favorites;
 
         public Builder name(String name) {
             this.name = name;
@@ -47,8 +49,8 @@ public class User implements Serializable {
             return this;
         }
 
-        public Builder favorites(List<Gym> favorites) {
-            this.favorites = new ArrayList<Gym>(favorites);
+        public Builder favorites(Set<Gym> favorites) {
+            this.favorites = new HashSet<Gym>(favorites);
             return this;
         }
 
@@ -70,7 +72,7 @@ public class User implements Serializable {
         return password;
     }
 
-    public List<Gym> getFavorites() {
+    public Set<Gym> getFavorites() {
         return favorites;
     }
 }

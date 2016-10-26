@@ -80,9 +80,14 @@ public class Gym implements Parcelable, Serializable {
         if (o == null) return false;
         if (o instanceof Gym) {
             Gym gym = (Gym) o;
-            return this.getName().equals(gym.getName()) & this.getAddress().equals(gym.getAddress()) & this.getLatLong().equals(gym.getLatLong()) & this.getTraffic().equals(gym.getTraffic());
+            return this.getName().replaceAll("\\s+", "").equals(gym.getName().replaceAll("\\s+", "")) & this.getAddress().replaceAll("\\s+", "").equals(gym.getAddress().replaceAll("\\s+", "")) & this.getLatLong().replaceAll("\\s+", "").equals(gym.getLatLong().replaceAll("\\s+", "")) & this.getTraffic().equals(gym.getTraffic());
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.getLatLong().hashCode() + this.getName().hashCode() + this.getTraffic().hashCode() + this.getAddress().hashCode();
     }
 
     @Override

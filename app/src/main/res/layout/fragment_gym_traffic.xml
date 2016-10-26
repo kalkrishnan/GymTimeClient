@@ -8,12 +8,12 @@
 
     <TextView
         android:id="@+id/gymName"
+        style="@style/GymTimeLabelBig"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:gravity="center"
-        android:text="Name"
-        style="@style/GymTimeLabelBig" />
+        android:text="Name" />
 
 
     <LinearLayout
@@ -51,29 +51,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:orientation="horizontal"
-       >
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/traffic"
             style="@style/GymTimeLabelBig"
-            android:layout_gravity="bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:text="@string/traffic_label" />
+
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            />
+            android:layout_weight="1" />
 
         <!--<com.cardiomood.android.controls.gauge.SpeedometerGauge-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_below="@id/traffic"-->
-            <!--android:padding="8dp"-->
-            <!--android:id="@+id/trafficmeter"-->
-            <!--/>-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_below="@id/traffic"-->
+        <!--android:padding="8dp"-->
+        <!--android:id="@+id/trafficmeter"-->
+        <!--/>-->
 
         <RatingBar
             android:id="@+id/ratingBar"
@@ -89,14 +88,25 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/check_in"
+    <LinearLayout
+        android:id="@+id/trafficButtonsLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/check_in"
-
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"/>
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/check_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/check_in" />
+
+        <FrameLayout
+            android:id="@+id/favorite_button_traffic"
+            android:name="layout.FavoriteButtonFragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 </RelativeLayout>

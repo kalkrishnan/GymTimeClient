@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * A placeholder fragment containing a simple view.
+ * A placeholder parentFragment containing a simple view.
  */
 public class GymListFragment extends Fragment {
 
@@ -35,7 +35,7 @@ public class GymListFragment extends Fragment {
 
 
         if (extras.getParcelableArrayList(getString(R.string.gym_bundle)) != null && !extras.getParcelableArrayList(getString(R.string.gym_bundle)).isEmpty()) {
-            gymAdapter = new GymItemAdapter(this.getContext(), new ArrayList<Gym>());
+            gymAdapter = new GymItemAdapter(this, this.getContext(), new ArrayList<Gym>());
             ListView gymView = ((ListView) rootView.findViewById(R.id.gym_detail));
 
             List<Gym> gymJson = extras.getParcelableArrayList(getString(R.string.gym_bundle));

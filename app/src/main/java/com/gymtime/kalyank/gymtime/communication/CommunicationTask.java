@@ -36,13 +36,20 @@ public class CommunicationTask extends AsyncTask<Map.Entry, Void, String> {
     }
 
     private String callHTTPPost(Map.Entry... urls) {
-        String body = "{";
-        for (int i = 2; i < urls.length; i++) {
-            Map.Entry part = urls[i];
-            body += "\"" + part.getKey() + "\":\"" + part.getValue() + "\",";
+        String body = "";
+        Log.d(CommunicationTask.class.getCanonicalName(), urls.toString());
+        if (urls.length > 3) {
+            body = "{";
+            for (int i = 2; i < urls.length; i++) {
+                Map.Entry part = urls[i];
+                body += "\"" + part.getKey() + "\":\"" + part.getValue() + "\",";
+            }
+            body = body.substring(0, body.length() - 1);
+            body += "}";
+        } else if (urls.length > 1) {
+            body = urls[2].getValue().toString();
         }
-        body = body.substring(0, body.length() - 1);
-        body += "}";
+        Log.d(CommunicationTask.class.getCanonicalName(), body);
         return HTTPClient.postData(urls[1].getValue().toString(), body).getMessage();
     }
 

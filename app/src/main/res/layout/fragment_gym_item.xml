@@ -44,12 +44,11 @@
         android:textSize="10sp"
         android:textStyle="italic|bold" />
 
-    <ImageButton
-        android:id="@+id/favorite"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:background="@drawable/btn_star"
-        android:focusable="false"
-        android:focusableInTouchMode="false" />
+
+    <FrameLayout
+        android:id="@+id/favorite_button_fragment"
+        android:name="layout.FavoriteButtonFragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
