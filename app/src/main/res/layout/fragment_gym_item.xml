@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/colorAccent"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -26,10 +26,18 @@
             android:id="@+id/gymAddress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
             android:text="Address"
-            android:textColor="#FFFFFF"
-            android:textSize="10sp"
+            android:textSize="14sp"
             android:textStyle="italic|bold" />
+
+
+        <FrameLayout
+            android:id="@+id/favorite_button_fragment"
+            android:name="layout.FavoriteButtonFragment"
+            android:layout_centerHorizontal="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -40,15 +48,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:text="Name"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/colorAccent"
         android:textSize="10sp"
         android:textStyle="italic|bold" />
-
-
-    <FrameLayout
-        android:id="@+id/favorite_button_fragment"
-        android:name="layout.FavoriteButtonFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 </LinearLayout>

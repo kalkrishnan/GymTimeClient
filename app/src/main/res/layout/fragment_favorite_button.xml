@@ -4,6 +4,21 @@
     android:layout_height="match_parent"
     tools:context="layout.FavoriteButtonFragment">
 
+    <LinearLayout
+        android:id="@+id/trafficButtonsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <ImageButton
+        android:id="@+id/check_in"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/checkin"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+
     <ImageButton
         android:id="@+id/favorite"
         android:layout_width="25dp"
@@ -11,5 +26,7 @@
         android:background="@drawable/btn_star"
         android:focusable="false"
         android:focusableInTouchMode="false" />
+
+    </LinearLayout>
 
 </FrameLayout>

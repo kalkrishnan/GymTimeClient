@@ -102,7 +102,7 @@ public class GymCommentsFragment extends Fragment {
                 final String comment = commentText.getText().toString();
                 if (comments.size() == commentAdapter.getViewTypeCount())
                     comments.remove(0);
-                comments.add(new Comment(comment, "@user", new Date().toString(), imageBytes));
+               comments.add(new Comment(comment, "@user", new Date().toString(), imageBytes));
                 final User user = new GsonBuilder().create().fromJson(sessionManager.getPreference(getContext(), Constants.USER.toString()), User.class);
 
                 new CommunicationTask(new CommunicationTask.CommunicationResponse() {
@@ -164,7 +164,6 @@ public class GymCommentsFragment extends Fragment {
                 imageBytes = GymTimeHelper.getBytesFromBitmap(imageBitmap);
             }
             commentImage.setVisibility(View.VISIBLE);
-            // commentText.setVisibility(View.GONE);
 
         }
     }
@@ -193,24 +192,4 @@ public class GymCommentsFragment extends Fragment {
                         new HashMap.SimpleEntry<String, String>("gymId", gymId));
     }
 
-//    @Override
-//    public void onDetach() {
-//        super.onDetach();
-//        mListener = null;
-//    }
-//
-//    /**
-//     * This interface must be implemented by activities that contain this
-//     * fragment to allow an interaction in this fragment to be communicated
-//     * to the activity and potentially other fragments contained in that
-//     * activity.
-//     * <p/>
-//     * See the Android Training lesson <a href=
-//     * "http://developer.android.com/training/basics/fragments/communicating.html"
-//     * >Communicating with Other Fragments</a> for more information.
-//     */
-//    public interface OnFragmentInteractionListener {
-//        // TODO: Update argument type and name
-//        void onFragmentInteraction(Uri uri);
-//    }
 }

@@ -1,10 +1,9 @@
 package layout;
 
 import android.annotation.TargetApi;
-import android.content.Context;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -15,19 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.google.gson.GsonBuilder;
-import com.gymtime.kalyank.gymtime.GymItemAdapter;
 import com.gymtime.kalyank.gymtime.R;
+import com.gymtime.kalyank.gymtime.TimePickerFragment;
 import com.gymtime.kalyank.gymtime.common.Constants;
 import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 import com.gymtime.kalyank.gymtime.dao.User;
 import com.gymtime.kalyank.gymtime.session.SessionManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class FavoriteButtonFragment extends Fragment {
@@ -41,14 +37,31 @@ public class FavoriteButtonFragment extends Fragment {
                              Bundle savedInstanceState) {
         final View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_favorite_button, null);
         sessionManager = new SessionManager();
-        Bundle bundle = getArguments();
+        final Bundle bundle = getArguments();
         gym = (Gym) bundle.getSerializable("gym");
 
         final User user = new GsonBuilder().create().fromJson(sessionManager.getPreference(this.getContext(), Constants.USER.toString()), User.class);
         final Set<Gym> favoriteGyms = user.getFavorites() != null ? user.getFavorites() : new HashSet<Gym>();
+        final ImageButton timerButton = (ImageButton) rootView.findViewById(R.id.check_in);
+
+        timerButton.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View v) {
+                if (!timerButton.isSelected()) {
+                    timerButton.setSelected(true);
+                    DialogFragment timePickerFragment = new TimePickerFragment();
+                    timePickerFragment.setArguments(bundle);
+                    getChildFragmentManager().beginTransaction().add(timePickerFragment, timePickerFragment.getTag()).commit();
+                    timePickerFragment.show(getFragmentManager(), "timePicker");
+                    v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.checkin_done, null));
+
+                } else {
+                }
+
+            }
+        });
         final ImageButton gymFavoriteButton = (ImageButton) rootView.findViewById(R.id.favorite);
-        Log.d(FavoriteButtonFragment.class.getCanonicalName(), gym.toString());
-        Log.d(FavoriteButtonFragment.class.getCanonicalName(), Arrays.toString(favoriteGyms.toArray()));
         if (favoriteGyms.contains(gym)) {
             Log.d(FavoriteButtonFragment.class.getCanonicalName(), "Favorite Gym Found");
             gymFavoriteButton.setSelected(true);

@@ -8,10 +8,12 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -52,19 +54,25 @@ public class GymTrafficFragment extends Fragment {
         gym = (Gym) bundle.getSerializable("gym");
 
         View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_gym_traffic, null);
-        Button timerButton = (Button) rootView.findViewById(R.id.check_in);
-
-        timerButton.setOnClickListener(new View.OnClickListener() {
-            @TargetApi(Build.VERSION_CODES.M)
-            @Override
-            public void onClick(View v) {
-                DialogFragment timePickerFragment = new TimePickerFragment();
-                timePickerFragment.setArguments(bundle);
-                getChildFragmentManager().beginTransaction().add(timePickerFragment, timePickerFragment.getTag()).commit();
-                timePickerFragment.show(getFragmentManager(), "timePicker");
-
-            }
-        });
+//        final ImageButton timerButton = (ImageButton) rootView.findViewById(R.id.check_in);
+//
+//        timerButton.setOnClickListener(new View.OnClickListener() {
+//            @TargetApi(Build.VERSION_CODES.M)
+//            @Override
+//            public void onClick(View v) {
+//                if (!timerButton.isSelected()) {
+//                    timerButton.setSelected(true);
+//                    DialogFragment timePickerFragment = new TimePickerFragment();
+//                    timePickerFragment.setArguments(bundle);
+//                    getChildFragmentManager().beginTransaction().add(timePickerFragment, timePickerFragment.getTag()).commit();
+//                    timePickerFragment.show(getFragmentManager(), "timePicker");
+//                    v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.checkin_done, null));
+//
+//                } else {
+//                }
+//
+//            }
+//        });
 
         addFavoriteButton(bundle, gym);
         TextView gymName = (TextView) rootView.findViewById(R.id.gymName);
