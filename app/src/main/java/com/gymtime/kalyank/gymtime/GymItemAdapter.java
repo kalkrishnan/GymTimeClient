@@ -19,7 +19,7 @@ import com.gymtime.kalyank.gymtime.dao.Gym;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import layout.FavoriteButtonFragment;
+import layout.OptionsButtonsFragment;
 
 /**
  * Created by kalyank on 2/20/2016.
@@ -49,7 +49,7 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
             layout.setId(newId);
             convertView.setTag(newId);
 
-            FavoriteButtonFragment fragment = new FavoriteButtonFragment();
+            OptionsButtonsFragment fragment = new OptionsButtonsFragment();
             bundle.putSerializable("gym", gym);
             fragment.setArguments(bundle);
             FragmentManager manager = parentFragment.getChildFragmentManager();

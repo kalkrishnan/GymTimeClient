@@ -29,7 +29,7 @@
     <string name="title_activity_gym_detail_tab">GymDetailTabActivity</string>
     <string name="title_activity_gym_detail_tabs">GymDetailTabs</string>
     <string name="EMAIL_OR_PASSWORD_INVALID">Invalid Email or Password</string>
-    <string name="gym_checkin_url">http://10.0.2.2:8080/checkIn</string>
+    <string name="gym_checkin_url">http://10.0.2.2:8080/checkIns</string>
     <string name="no_reminders">no_reminders</string>
     <string-array name="reminder_times">
         <item />

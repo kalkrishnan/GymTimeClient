@@ -33,6 +33,7 @@ import com.gymtime.kalyank.gymtime.dao.User;
 import com.gymtime.kalyank.gymtime.session.SessionManager;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
 public class TimePickerFragment extends DialogFragment
@@ -127,12 +128,12 @@ public class TimePickerFragment extends DialogFragment
             public void processFinish(String output) {
             }
         }).execute
-                (new HashMap.SimpleEntry<String, String>("method", "GET"),
+                (new HashMap.SimpleEntry<String, String>("method", "POST"),
                         new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_checkin_url)),
                         new HashMap.SimpleEntry<String, String>("gymId", gym.getLatLong()),
                         new HashMap.SimpleEntry<String, String>("gymName", gym.getName()),
                         new HashMap.SimpleEntry<String, String>("userId", user.getEmail()),
-                        new HashMap.SimpleEntry<String, String>("checkInTime", checkInTime.toString()));
+                        new HashMap.SimpleEntry<String, String>("checkInTime", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").format(checkInTime)));
         Log.d(GymTrafficFragment.class.getCanonicalName(), checkInTime.toString());
     }
 

@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class FavoriteButtonFragment extends Fragment {
+public class OptionsButtonsFragment extends Fragment {
 
     private SessionManager sessionManager;
     private Gym gym;
@@ -35,7 +35,7 @@ public class FavoriteButtonFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_favorite_button, null);
+        final View rootView = LayoutInflater.from(getActivity()).inflate(R.layout.fragment_options_buttons, null);
         sessionManager = new SessionManager();
         final Bundle bundle = getArguments();
         gym = (Gym) bundle.getSerializable("gym");
@@ -63,7 +63,7 @@ public class FavoriteButtonFragment extends Fragment {
         });
         final ImageButton gymFavoriteButton = (ImageButton) rootView.findViewById(R.id.favorite);
         if (favoriteGyms.contains(gym)) {
-            Log.d(FavoriteButtonFragment.class.getCanonicalName(), "Favorite Gym Found");
+            Log.d(OptionsButtonsFragment.class.getCanonicalName(), "Favorite Gym Found");
             gymFavoriteButton.setSelected(true);
             gymFavoriteButton.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_on_pressed, null));
         }

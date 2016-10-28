@@ -1,19 +1,13 @@
 package com.gymtime.kalyank.gymtime;
 
-import android.annotation.TargetApi;
 import android.location.Location;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -21,7 +15,7 @@ import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.text.DecimalFormat;
 
-import layout.FavoriteButtonFragment;
+import layout.OptionsButtonsFragment;
 
 
 /**
@@ -108,7 +102,7 @@ public class GymTrafficFragment extends Fragment {
     }
 
     private void addFavoriteButton(Bundle bundle, Gym gym) {
-        FavoriteButtonFragment fragment = new FavoriteButtonFragment();
+        OptionsButtonsFragment fragment = new OptionsButtonsFragment();
         bundle.putSerializable("gym", this.gym);
         fragment.setArguments(bundle);
         FragmentManager manager = getChildFragmentManager();
