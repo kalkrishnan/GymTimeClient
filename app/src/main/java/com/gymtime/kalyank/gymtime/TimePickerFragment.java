@@ -171,6 +171,7 @@ public class TimePickerFragment extends DialogFragment
         values.put(CalendarContract.Events.EVENT_TIMEZONE, "America/Los_Angeles");
         AsyncQueryHandler handler = new MyCheckInHandler(cr, reminderTime);
         handler.startInsert(0, null, CalendarContract.Events.CONTENT_URI, values);
+
     }
 
     private class MyCheckInHandler extends AsyncQueryHandler {

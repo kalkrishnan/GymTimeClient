@@ -2,6 +2,7 @@ package com.gymtime.kalyank.gymtime.common;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -51,19 +52,9 @@ public class GymTimeHelper {
         }});
     }
 
-
     @NonNull
-    public static String generateId(Gym gym) {
-        return gym.getName() + gym.getAddress();
-    }
-
-    public static ArrayList<String> generateFavoriteGymIds(ArrayList<Gym> listGyms) {
-
-        ArrayList<String> favoriteGyms = new ArrayList<>();
-        for (Gym gym : listGyms) {
-            favoriteGyms.add(generateId(gym));
-        }
-        return favoriteGyms;
+    public static String getLatLongFromLocation(Location location) {
+        return String.format("%.2f", location.getLatitude()) + "_" + String.format("%.2f", location.getLongitude());
     }
 
     public static Bitmap getBitmapFromPath(String imagePath) {
@@ -112,14 +103,13 @@ public class GymTimeHelper {
         String time = commentJson.get("time").toString().replace("\"", "");
         Log.d(GymTimeHelper.class.getCanonicalName(), commentJson.get("commentImage").toString());
         byte[] commentImage = commentJson.get("commentImage").toString().isEmpty() ? null : Base64.decode(commentJson.get("commentImage").toString().replace("\"", ""),
-        Base64.NO_WRAP | Base64.URL_SAFE);
+                Base64.NO_WRAP | Base64.URL_SAFE);
 
         return new Comment(comment, userId, time, commentImage);
     }
 
     public static int getReminderTime(String reminderTime) {
-        switch(reminderTime)
-        {
+        switch (reminderTime) {
             case "15 minutes":
                 return 15;
             case "30 minutes":

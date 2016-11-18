@@ -5,6 +5,7 @@
     <string name="view_location_id">location</string>
     <string name="title_activity_gym_detail">Gyms Near Your Location</string>
     <string name="gym_service_url">http://10.0.2.2:8080/searchGyms</string>
+    <string name="gym_service_latlong_url">http://10.0.2.2:8080/searchGymsByLatLong</string>
     <string name="search_hint">Location</string>
     <string name="menu_search">Search</string>
     <string name="traffic_label">Traffic</string>

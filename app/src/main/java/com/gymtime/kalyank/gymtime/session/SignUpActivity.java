@@ -1,7 +1,9 @@
 package com.gymtime.kalyank.gymtime.session;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,7 +21,7 @@ import com.gymtime.kalyank.gymtime.R;
 import com.gymtime.kalyank.gymtime.common.Constants;
 import com.gymtime.kalyank.gymtime.communication.HTTPClient;
 import com.gymtime.kalyank.gymtime.communication.HTTPResponse;
-import com.gymtime.kalyank.gymtime.dao.User;
+import com.gymtime.kalyank.gymtime.service.LocationService;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
     @BindView(R.id.link_login)
     TextView _loginLink;
     ProgressDialog progressDialog;
+    private final int MY_PERMISSIONS_ACCESS_LOCATION = 111;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +57,9 @@ public class SignUpActivity extends AppCompatActivity {
         _signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signup();
+                requestPermissions(
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                        MY_PERMISSIONS_ACCESS_LOCATION);
             }
         });
 
@@ -67,6 +72,24 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        Log.d(GymTimeActivity.class.getCanonicalName(), Integer.toString(requestCode));
+        signup();
+//        switch (requestCode) {
+//
+//            case MY_PERMISSIONS_ACCESS_LOCATION: {
+//                if (grantResults.length > 0
+//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//
+//                }
+//                return;
+//            }
+//
+//        }
+    }
 
     private void storeUser(String _user) {
         sessionManager.setPreference(SignUpActivity.this, Constants.USER.toString(), _user);
@@ -117,10 +140,18 @@ public class SignUpActivity extends AppCompatActivity {
 
             } else {
                 storeUser(response.getMessage());
+                if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    startLocationService();
+                }
                 onSignupSuccess();
             }
         }
 
+    }
+
+    private void startLocationService() {
+        Intent locationIntent = new Intent(this, LocationService.class);
+        startService(locationIntent);
     }
 
     public void onSignupSuccess() {
@@ -132,6 +163,7 @@ public class SignUpActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
 
     public void onSignupFailed(String error) {
         Toast.makeText(getBaseContext(), error, Toast.LENGTH_LONG).show();

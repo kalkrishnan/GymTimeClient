@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,11 +45,11 @@ public class GymItemAdapter extends ArrayAdapter<Gym> {
         // Check if an existing view is being reused, otherwise inflate the view
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.fragment_gym_item, parent, false);
-            int newId = 100000 + position;
+            int newId = (new Double(Math.random()* 1000)).intValue() + position;
             FrameLayout layout = (FrameLayout) convertView.findViewById(R.id.favorite_button_fragment);
             layout.setId(newId);
             convertView.setTag(newId);
-
+            Log.d(GymItemAdapter.class.getCanonicalName(), "Container Id: " + newId);
             OptionsButtonsFragment fragment = new OptionsButtonsFragment();
             bundle.putSerializable("gym", gym);
             fragment.setArguments(bundle);

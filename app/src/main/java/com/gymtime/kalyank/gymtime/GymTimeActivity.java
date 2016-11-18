@@ -1,11 +1,14 @@
 package com.gymtime.kalyank.gymtime;
 
+import android.Manifest;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +20,7 @@ import android.widget.TextView;
 import com.fivehundredpx.android.blur.BlurringView;
 import com.gymtime.kalyank.gymtime.common.GymTimeHelper;
 import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
+import com.gymtime.kalyank.gymtime.service.LocationService;
 
 import java.util.HashMap;
 
@@ -31,6 +35,8 @@ public class GymTimeActivity extends BaseActivity {
         setContentView(R.layout.activity_gym_time);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
         final LinearLayout root = (LinearLayout) findViewById(R.id.gymtime_view);
         BlurringView blurringView = (BlurringView) findViewById(R.id.gymtime_blurringview);
         blurringView.setBlurredView(root);
@@ -71,6 +77,8 @@ public class GymTimeActivity extends BaseActivity {
         searchView.setOnQueryTextListener(queryTextListener);
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -4,9 +4,12 @@
     package="com.gymtime.kalyank.gymtime">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-sdk tools:overrideLibrary="ua.naiksoftware.stomp" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-sdk tools:overrideLibrary="ua.naiksoftware.stomp" />
 
     <application
         android:allowBackup="true"
@@ -14,6 +17,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service android:name=".service.LocationService" />
         <activity
             android:name=".GymTimeActivity"
             android:label="@string/app_name"

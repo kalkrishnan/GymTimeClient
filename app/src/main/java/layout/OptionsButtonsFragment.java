@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.google.gson.GsonBuilder;
+import com.gymtime.kalyank.gymtime.GymTrafficFragment;
 import com.gymtime.kalyank.gymtime.R;
 import com.gymtime.kalyank.gymtime.TimePickerFragment;
 import com.gymtime.kalyank.gymtime.common.Constants;
@@ -43,6 +44,7 @@ public class OptionsButtonsFragment extends Fragment {
         final User user = new GsonBuilder().create().fromJson(sessionManager.getPreference(this.getContext(), Constants.USER.toString()), User.class);
         final Set<Gym> favoriteGyms = user.getFavorites() != null ? user.getFavorites() : new HashSet<Gym>();
         final ImageButton timerButton = (ImageButton) rootView.findViewById(R.id.check_in);
+        Log.d(OptionsButtonsFragment.class.getCanonicalName(), "Creating Option Buttons Fragment");
 
         timerButton.setOnClickListener(new View.OnClickListener() {
             @TargetApi(Build.VERSION_CODES.M)
@@ -52,10 +54,11 @@ public class OptionsButtonsFragment extends Fragment {
                     timerButton.setSelected(true);
                     DialogFragment timePickerFragment = new TimePickerFragment();
                     timePickerFragment.setArguments(bundle);
-                    getChildFragmentManager().beginTransaction().add(timePickerFragment, timePickerFragment.getTag()).commit();
-                    timePickerFragment.show(getFragmentManager(), "timePicker");
-                    v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.checkin_done, null));
+                   // if (getChildFragmentManager().findFragmentByTag(timePickerFragment.getTag()) == null) {
+                        timePickerFragment.show(getChildFragmentManager(), timePickerFragment.getTag());
 
+                    //}
+                    v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.checkin_done, null));
                 } else {
                 }
 
@@ -63,7 +66,6 @@ public class OptionsButtonsFragment extends Fragment {
         });
         final ImageButton gymFavoriteButton = (ImageButton) rootView.findViewById(R.id.favorite);
         if (favoriteGyms.contains(gym)) {
-            Log.d(OptionsButtonsFragment.class.getCanonicalName(), "Favorite Gym Found");
             gymFavoriteButton.setSelected(true);
             gymFavoriteButton.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.btn_star_big_on_pressed, null));
         }
