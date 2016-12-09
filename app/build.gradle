@@ -61,4 +61,5 @@ dependencies {
     compile 'com.github.NaikSoftware:StompProtocolAndroid:1.0.11'
     compile 'com.github.k0shk0sh:RetainedDateTimePickers:1.0.1'
     compile 'joda-time:joda-time:2.9.4'
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
 }

@@ -53,13 +53,13 @@
         android:layout_centerInParent="true"
         android:orientation="horizontal">
 
-        <TextView
+        <!--TextView
             android:id="@+id/traffic"
             style="@style/GymTimeLabelBig"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:text="@string/traffic_label" />
+            android:text="@string/traffic_label" /-->
 
         <View
             android:layout_width="0dp"
@@ -74,7 +74,7 @@
         <!--android:id="@+id/trafficmeter"-->
         <!--/>-->
 
-        <RatingBar
+        <!--RatingBar
             android:id="@+id/ratingBar"
             style="@style/GymTrafficBar"
             android:layout_width="wrap_content"
@@ -84,7 +84,12 @@
             android:isIndicator="true"
             android:numStars="1"
             android:rating="2.0"
-            android:stepSize="0.1" />
+            android:stepSize="0.1" /-->
+
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/trafficChart"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
 
     </LinearLayout>
 

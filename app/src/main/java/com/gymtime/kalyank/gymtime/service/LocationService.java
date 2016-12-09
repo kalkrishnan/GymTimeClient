@@ -34,7 +34,7 @@ public class LocationService extends Service {
     private static final String TAG = "GYMTIMEGPS";
     private LocationManager mLocationManager = null;
     private static final int LOCATION_INTERVAL = 1000;
-    private static final float LOCATION_DISTANCE = 10f;
+    private static final float LOCATION_DISTANCE = 1000f;
     private Map<String, Gym> gymLocations = new HashMap<String, Gym>();
     SessionManager sessionManager = new SessionManager();
     private User user;

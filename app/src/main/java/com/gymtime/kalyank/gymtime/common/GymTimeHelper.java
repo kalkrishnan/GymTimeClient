@@ -4,22 +4,23 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.support.annotation.NonNull;
+import android.util.Base64;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
-import android.util.Base64;
-
 import com.gymtime.kalyank.gymtime.dao.Comment;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Created by kalyanak on 7/26/2016.
@@ -41,15 +42,16 @@ public class GymTimeHelper {
         return gyms;
     }
 
-    private static Gym parseGym(final JsonObject gymJson) {
+    public static Gym parseGym(final JsonObject gymJson) {
 
         String name = gymJson.get("name").toString().replace("\"", "");
         String address = gymJson.get("address").toString().replace("\"", "");
         String latLong = gymJson.get("latLong").toString().replace("\"", "");
         Log.d(GymTimeHelper.class.getCanonicalName(), latLong);
-        return new Gym(latLong, name, address, new ArrayList() {{
-            add(Double.parseDouble(gymJson.get("traffic").getAsJsonArray().get(0).getAsString()));
-        }});
+        JsonObject trafficArray = gymJson.get("traffic").getAsJsonObject();
+        HashMap<Integer, Integer> trafficMap = new Gson().fromJson(trafficArray, HashMap.class);
+        Log.d(GymTimeHelper.class.getCanonicalName(), Arrays.toString(trafficMap.keySet().toArray()));
+        return new Gym(latLong, name, address, trafficMap);
     }
 
     @NonNull
@@ -82,14 +84,14 @@ public class GymTimeHelper {
             jelement = jelement.getAsJsonObject().getAsJsonObject("_embedded").getAsJsonArray("comments");
             if (jelement.isJsonArray()) {
                 JsonArray jarray = jelement.getAsJsonArray();
-                ArrayList<Comment> gyms = new ArrayList<Comment>();
+                ArrayList<Comment> comments = new ArrayList<Comment>();
                 for (JsonElement jsonElement : jarray) {
 
                     jobject = jsonElement.getAsJsonObject();
-                    gyms.add(parseComment(jobject));
+                    comments.add(parseComment(jobject));
 
                 }
-                return gyms;
+                return comments;
             }
             return Collections.EMPTY_LIST;
         }

@@ -77,18 +77,6 @@ public class SignUpActivity extends AppCompatActivity {
                                            String permissions[], int[] grantResults) {
         Log.d(GymTimeActivity.class.getCanonicalName(), Integer.toString(requestCode));
         signup();
-//        switch (requestCode) {
-//
-//            case MY_PERMISSIONS_ACCESS_LOCATION: {
-//                if (grantResults.length > 0
-//                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//
-//
-//                }
-//                return;
-//            }
-//
-//        }
     }
 
     private void storeUser(String _user) {

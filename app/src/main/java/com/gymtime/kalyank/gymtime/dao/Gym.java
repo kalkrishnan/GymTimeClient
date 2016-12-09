@@ -3,28 +3,23 @@ package com.gymtime.kalyank.gymtime.dao;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.common.primitives.Doubles;
-
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Gym implements Parcelable, Serializable {
 
     private final String latLong;
     private final String name;
     private final String address;
-    private final List<Double> traffic;
-    //   private final Boolean favorite;
+    private final Map<Integer, Integer> traffic;
 
-    public Gym(String latLong, String name, String address, List<Double> traffic) {
+    public Gym(String latLong, String name, String address, Map<Integer, Integer> traffic) {
 
         this.latLong = latLong;
         this.name = name;
         this.address = address;
         this.traffic = traffic;
-        //this.favorite = favorite;
     }
 
 
@@ -32,10 +27,13 @@ public class Gym implements Parcelable, Serializable {
         latLong = in.readString();
         name = in.readString();
         address = in.readString();
-        double[] _traffic = in.createDoubleArray();
-        traffic = Doubles.asList(_traffic);
-        ;
-        //favorite = in.readByte() != 0;
+        traffic = new HashMap<Integer, Integer>();
+        int size = in.readInt();
+        for (int i = 0; i < size; i++) {
+            int key = in.readInt();
+            int value = in.readInt();
+            traffic.put(key, value);
+        }
     }
 
     public static final Creator<Gym> CREATOR = new Creator<Gym>() {
@@ -62,13 +60,9 @@ public class Gym implements Parcelable, Serializable {
         return address;
     }
 
-    public List<Double> getTraffic() {
+    public Map<Integer, Integer> getTraffic() {
         return traffic;
     }
-
-    /*public Boolean getFavorite() {
-        return favorite;
-    }*/
 
     @Override
     public String toString() {
@@ -100,7 +94,10 @@ public class Gym implements Parcelable, Serializable {
         dest.writeString(latLong);
         dest.writeString(name);
         dest.writeString(address);
-        dest.writeDoubleArray(Doubles.toArray(traffic));
-        //dest.writeByte((byte) (favorite ? 1 : 0));
+        dest.writeInt(traffic.size());
+        for (Map.Entry entry : traffic.entrySet()) {
+            dest.writeInt(Integer.parseInt(entry.getKey().toString()));
+            dest.writeInt((int) Double.parseDouble(entry.getValue().toString()));
+        }
     }
 }

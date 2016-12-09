@@ -33,7 +33,7 @@ public class GymListFragment extends Fragment {
 
         Bundle extras = this.getActivity().getIntent().getExtras();
 
-
+        Log.d(GymListFragment.class.getCanonicalName(), getString(R.string.gym_bundle));
         if (extras.getParcelableArrayList(getString(R.string.gym_bundle)) != null && !extras.getParcelableArrayList(getString(R.string.gym_bundle)).isEmpty()) {
             gymAdapter = new GymItemAdapter(this, this.getContext(), new ArrayList<Gym>());
             ListView gymView = ((ListView) rootView.findViewById(R.id.gym_detail));

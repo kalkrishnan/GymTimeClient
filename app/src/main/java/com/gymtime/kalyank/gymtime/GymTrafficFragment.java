@@ -1,19 +1,33 @@
 package com.gymtime.kalyank.gymtime;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import layout.OptionsButtonsFragment;
 
@@ -77,9 +91,11 @@ public class GymTrafficFragment extends Fragment {
 
         gymDistance.setText(getDistance(gym.getLatLong()));
 
-        RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
-        ratingBar.setRating(gym.getTraffic().get(0).floatValue());
+//        RatingBar ratingBar = (RatingBar) rootView.findViewById(R.id.ratingBar);
+//        ratingBar.setRating(gym.getTraffic().get(0).floatValue());
 
+        BarChart chart = (BarChart) rootView.findViewById(R.id.trafficChart);
+        updateTraffic(gym.getLatLong(), chart);
 //        SpeedometerGauge speedometer = (SpeedometerGauge) rootView.findViewById(R.id.trafficmeter);
 //        speedometer.setLabelConverter(new SpeedometerGauge.LabelConverter() {
 //            @Override
@@ -125,6 +141,56 @@ public class GymTrafficFragment extends Fragment {
         gymLocation.setLatitude(endLat);
         gymLocation.setLongitude(endLong);
         return twoDForm.format(gymLocation.distanceTo(home) / 1600) + "mi";
+    }
+
+    public void updateTraffic(String gymId, final BarChart chart) {
+
+
+        new CommunicationTask(new CommunicationTask.CommunicationResponse() {
+            @Override
+            public void processFinish(String output) {
+                Log.d(GymTrafficFragment.class.getCanonicalName(), output);
+                JsonElement jelement = new JsonParser().parse(output);
+
+                if (jelement.isJsonArray() && jelement.getAsJsonArray().size() > 0) {
+                    JsonArray jarray = jelement.getAsJsonArray();
+
+                    List<BarEntry> entries = new ArrayList<BarEntry>();
+                    for (JsonElement trafficEntry : jarray) {
+                        final JsonArray trafficArray = trafficEntry.getAsJsonArray();
+                        entries.add(new BarEntry(trafficArray.get(0).getAsInt(), trafficArray.get(1).getAsInt()));
+                    }
+                    BarDataSet dataSet = new BarDataSet(entries, "Traffic");
+                    dataSet.setValueTextColor(Color.CYAN);
+                    dataSet.setValueTextSize(12f);
+                    BarData barData = new BarData(dataSet);
+                    barData.setBarWidth(0.9f);
+                    chart.setData(barData);
+                    chart.setFitBars(true);
+
+                    XAxis xAxis = chart.getXAxis();
+                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+                    xAxis.setTextSize(10f);
+                    xAxis.setTextColor(Color.CYAN);
+                    xAxis.setDrawAxisLine(true);
+                    xAxis.setDrawGridLines(false);
+
+                    YAxis yAxis = chart.getAxisLeft();
+                    yAxis.setTextSize(10f);
+                    yAxis.setTextColor(Color.CYAN);
+                    yAxis.setDrawAxisLine(true);
+                    yAxis.setDrawGridLines(false);
+                    chart.getAxisRight().setEnabled(false);
+                    chart.getLegend().setTextColor(Color.CYAN);
+                    chart.getDescription().setEnabled(false);
+                    chart.invalidate();
+                }
+
+            }
+        }).execute
+                (new HashMap.SimpleEntry<String, String>("method", "GET"),
+                        new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_gettraffic_url)),
+                        new HashMap.SimpleEntry<String, String>("gymId", gymId));
     }
 
 
