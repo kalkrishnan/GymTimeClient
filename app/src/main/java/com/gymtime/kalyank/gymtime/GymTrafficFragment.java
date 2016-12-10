@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -21,11 +22,16 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.gymtime.kalyank.gymtime.common.Traffic.TrafficDataSet;
+import com.gymtime.kalyank.gymtime.common.Traffic.TrafficValueFormatter;
+import com.gymtime.kalyank.gymtime.common.Traffic.TrafficXAxisValueFormatter;
 import com.gymtime.kalyank.gymtime.communication.CommunicationTask;
 import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -158,28 +164,42 @@ public class GymTrafficFragment extends Fragment {
                     List<BarEntry> entries = new ArrayList<BarEntry>();
                     for (JsonElement trafficEntry : jarray) {
                         final JsonArray trafficArray = trafficEntry.getAsJsonArray();
-                        entries.add(new BarEntry(trafficArray.get(0).getAsInt(), trafficArray.get(1).getAsInt()));
+                        final BarEntry barEntry = new BarEntry(trafficArray.get(0).getAsInt(), trafficArray.get(1).getAsInt());
+                        entries.add(barEntry);
+
                     }
-                    BarDataSet dataSet = new BarDataSet(entries, "Traffic");
+                    BarDataSet dataSet = new TrafficDataSet(entries, "Traffic Count");
+                    dataSet.setColors(Color.GREEN, Color.MAGENTA, Color.CYAN, Color.RED);
                     dataSet.setValueTextColor(Color.CYAN);
                     dataSet.setValueTextSize(12f);
+                    dataSet.setHighLightColor(Color.RED);
                     BarData barData = new BarData(dataSet);
+                    barData.setValueFormatter(new TrafficValueFormatter());
                     barData.setBarWidth(0.9f);
                     chart.setData(barData);
                     chart.setFitBars(true);
+                    chart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+                    chart.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
+                    chart.setExtraBottomOffset(30f);
+                    chart.setHorizontalScrollBarEnabled(true);
 
                     XAxis xAxis = chart.getXAxis();
                     xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                     xAxis.setTextSize(10f);
+                    // xAxis.setLabelCount(24)
+                    xAxis.setLabelRotationAngle(90f);
                     xAxis.setTextColor(Color.CYAN);
                     xAxis.setDrawAxisLine(true);
                     xAxis.setDrawGridLines(false);
+                    xAxis.setAxisMinimum(0f);
+                    xAxis.setAxisMaximum(24f);
+                    xAxis.setLabelCount(24, true);
+                    xAxis.setValueFormatter(new TrafficXAxisValueFormatter());
 
                     YAxis yAxis = chart.getAxisLeft();
-                    yAxis.setTextSize(10f);
-                    yAxis.setTextColor(Color.CYAN);
                     yAxis.setDrawAxisLine(true);
                     yAxis.setDrawGridLines(false);
+                    yAxis.setDrawLabels(false);
                     chart.getAxisRight().setEnabled(false);
                     chart.getLegend().setTextColor(Color.CYAN);
                     chart.getDescription().setEnabled(false);
