@@ -1,6 +1,7 @@
 package com.gymtime.kalyank.gymtime;
 
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.gymtime.kalyank.gymtime.common.Traffic.TrafficChartHelper;
 import com.gymtime.kalyank.gymtime.common.Traffic.TrafficDataSet;
 import com.gymtime.kalyank.gymtime.common.Traffic.TrafficValueFormatter;
 import com.gymtime.kalyank.gymtime.common.Traffic.TrafficXAxisValueFormatter;
@@ -30,8 +32,7 @@ import com.gymtime.kalyank.gymtime.dao.Gym;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.BitSet;
 import java.util.HashMap;
 import java.util.List;
 
@@ -157,52 +158,39 @@ public class GymTrafficFragment extends Fragment {
             public void processFinish(String output) {
                 Log.d(GymTrafficFragment.class.getCanonicalName(), output);
                 JsonElement jelement = new JsonParser().parse(output);
-
+                BitSet hourMap = new BitSet(24);
                 if (jelement.isJsonArray() && jelement.getAsJsonArray().size() > 0) {
                     JsonArray jarray = jelement.getAsJsonArray();
 
                     List<BarEntry> entries = new ArrayList<BarEntry>();
                     for (JsonElement trafficEntry : jarray) {
                         final JsonArray trafficArray = trafficEntry.getAsJsonArray();
-                        final BarEntry barEntry = new BarEntry(trafficArray.get(0).getAsInt(), trafficArray.get(1).getAsInt());
+                        final int hour = trafficArray.get(0).getAsInt();
+                        hourMap.set(hour);
+                        BarEntry barEntry = new BarEntry(hour, trafficArray.get(1).getAsInt());
                         entries.add(barEntry);
 
                     }
-                    BarDataSet dataSet = new TrafficDataSet(entries, "Traffic Count");
+                    for (int i = hourMap.nextClearBit(0); i != -1; i = hourMap.nextClearBit(i + 1)) {
+                        if (i == 24) {
+                            break;
+                        }
+                        BarEntry barEntry = new BarEntry(i, 1);
+                        entries.add(barEntry);
+                    }
+                    TrafficDataSet dataSet = new TrafficDataSet(entries, "Traffic Count");
                     dataSet.setColors(Color.GREEN, Color.MAGENTA, Color.CYAN, Color.RED);
-                    dataSet.setValueTextColor(Color.CYAN);
                     dataSet.setValueTextSize(12f);
-                    dataSet.setHighLightColor(Color.RED);
+                    dataSet.setValueTextColor(Color.CYAN);
                     BarData barData = new BarData(dataSet);
                     barData.setValueFormatter(new TrafficValueFormatter());
                     barData.setBarWidth(0.9f);
+
+                    TrafficChartHelper.configureTrafficXAxis(chart.getXAxis());
+                    TrafficChartHelper.configureTrafficYAxis(chart.getAxisLeft());
+
                     chart.setData(barData);
-                    chart.setFitBars(true);
-                    chart.getLegend().setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-                    chart.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
-                    chart.setExtraBottomOffset(30f);
-                    chart.setHorizontalScrollBarEnabled(true);
-
-                    XAxis xAxis = chart.getXAxis();
-                    xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                    xAxis.setTextSize(10f);
-                    // xAxis.setLabelCount(24)
-                    xAxis.setLabelRotationAngle(90f);
-                    xAxis.setTextColor(Color.CYAN);
-                    xAxis.setDrawAxisLine(true);
-                    xAxis.setDrawGridLines(false);
-                    xAxis.setAxisMinimum(0f);
-                    xAxis.setAxisMaximum(24f);
-                    xAxis.setLabelCount(24, true);
-                    xAxis.setValueFormatter(new TrafficXAxisValueFormatter());
-
-                    YAxis yAxis = chart.getAxisLeft();
-                    yAxis.setDrawAxisLine(true);
-                    yAxis.setDrawGridLines(false);
-                    yAxis.setDrawLabels(false);
-                    chart.getAxisRight().setEnabled(false);
-                    chart.getLegend().setTextColor(Color.CYAN);
-                    chart.getDescription().setEnabled(false);
+                    TrafficChartHelper.configureTrafficChart(chart);
                     chart.invalidate();
                 }
 
@@ -212,6 +200,5 @@ public class GymTrafficFragment extends Fragment {
                         new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_gettraffic_url)),
                         new HashMap.SimpleEntry<String, String>("gymId", gymId));
     }
-
 
 }

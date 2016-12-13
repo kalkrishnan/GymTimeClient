@@ -15,9 +15,12 @@ public class TrafficXAxisValueFormatter implements IAxisValueFormatter {
     @Override
     public String getFormattedValue(float value, AxisBase axis) {
 
-//        if ((int) value == GregorianCalendar.getInstance().get(Calendar.HOUR_OF_DAY))
-//            return "NOW";
-        return Integer.toString((int) value) + ":00 Hrs";
+        final int hour = (int) value;
+        if (hour > 12)
+           return hour-12+" PM";
+        else if(hour == 12)
+            return hour + " PM  ";
+        return hour + " AM";
     }
 
 }

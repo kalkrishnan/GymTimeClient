@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -75,7 +77,6 @@ public class SignUpActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
-        Log.d(GymTimeActivity.class.getCanonicalName(), Integer.toString(requestCode));
         signup();
     }
 
@@ -85,8 +86,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public String signup() {
-        Log.d(TAG, "Signup");
-
+        progressDialog = ProgressDialog.show(SignUpActivity.this,
+                null, "Creating Account...");
         if (!validate()) {
             onSignupFailed("Invalid Input");
             return "";
@@ -94,8 +95,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         _signupButton.setEnabled(false);
 
-        progressDialog = ProgressDialog.show(SignUpActivity.this,
-                null, "Creating Account...");
 
         String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
@@ -160,7 +159,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     public boolean validate() {
-        boolean valid = true;
 
         String name = _nameText.getText().toString();
         String email = _emailText.getText().toString();
@@ -168,25 +166,22 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (name.isEmpty() || name.length() < 3) {
             _nameText.setError("at least 3 characters");
-            valid = false;
-        } else {
-            _nameText.setError(null);
+            _nameText.requestFocus();
+            return false;
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _emailText.setError("enter a valid email address");
-            valid = false;
-        } else {
-            _emailText.setError(null);
+            _emailText.requestFocus();
+            return false;
         }
 
         if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
             _passwordText.setError("between 4 and 10 alphanumeric characters");
-            valid = false;
-        } else {
-            _passwordText.setError(null);
+            _passwordText.requestFocus();
+           return false;
         }
 
-        return valid;
+        return true;
     }
 }
