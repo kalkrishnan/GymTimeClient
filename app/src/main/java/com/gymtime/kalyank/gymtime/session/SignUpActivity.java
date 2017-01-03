@@ -120,7 +120,6 @@ public class SignUpActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(HTTPResponse response) {
 
-            Log.d(SignUpActivity.class.getCanonicalName(), response.getMessage());
             if (response.getMessage().toString().equals(getString(R.string.email_already_exists))) {
                 Log.d(SignUpActivity.TAG, response.getMessage());
                 onSignupFailed(response.getMessage());

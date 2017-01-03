@@ -109,7 +109,8 @@ public class LoginActivity extends AppCompatActivity {
         new LoginTask().execute(new HashMap.SimpleEntry<String, String>("method", "GET"),
                 new HashMap.SimpleEntry<String, String>("url", getString(R.string.gym_login_url)),
                 new HashMap.SimpleEntry<String, String>("email", email),
-                new HashMap.SimpleEntry<String, String>("password", password));
+                new HashMap.SimpleEntry<String, String>("password", password),
+                new HashMap.SimpleEntry<String, String>("projection", "inlineFavorites"));
 
     }
 
@@ -142,7 +143,9 @@ public class LoginActivity extends AppCompatActivity {
         sessionManager.setPreference(LoginActivity.this, Constants.USER.toString(), _user);
         Intent myIntent = new Intent(LoginActivity.this, GymTimeActivity.class);
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(getString(R.string.gym_bundle), new ArrayList<Gym>(user.getFavorites()));
+        Log.d(LoginActivity.class.getCanonicalName(), user.toString());
+        if (user.getFavorites() != null)
+            bundle.putParcelableArrayList(getString(R.string.gym_bundle), new ArrayList<Gym>(user.getFavorites()));
         myIntent.putExtras(bundle);
         LoginActivity.this.startActivity(myIntent);
         finish();

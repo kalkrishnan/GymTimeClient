@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.gymtime.kalyank.gymtime.GymTimeActivity;
 
+import java.util.Arrays;
 import java.util.Map;
 
 public class CommunicationTask extends AsyncTask<Map.Entry, Void, String> {
@@ -37,7 +38,7 @@ public class CommunicationTask extends AsyncTask<Map.Entry, Void, String> {
 
     private String callHTTPPost(Map.Entry... urls) {
         String body = "";
-        Log.d(CommunicationTask.class.getCanonicalName(), urls.toString());
+        Log.d(CommunicationTask.class.getCanonicalName(), urls[1].getValue().toString());
         if (urls.length > 3) {
             body = "{";
             for (int i = 2; i < urls.length; i++) {
@@ -46,8 +47,10 @@ public class CommunicationTask extends AsyncTask<Map.Entry, Void, String> {
             }
             body = body.substring(0, body.length() - 1);
             body += "}";
-        } else if (urls.length > 1) {
+        } else if (urls.length > 2) {
             body = urls[2].getValue().toString();
+        } else if (urls.length == 2) {
+            body = urls[1].getValue().toString();
         }
         Log.d(CommunicationTask.class.getCanonicalName(), body);
         return HTTPClient.postData(urls[1].getValue().toString(), body).getMessage();

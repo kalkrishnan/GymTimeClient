@@ -17,7 +17,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="gym_login_url">http://10.0.2.2:8080/user/search/findByEmailAndPassword</string>
     <string name="gym_signup_url">http://10.0.2.2:8080/user</string>
-    <string name="gym_favorite_url">http://10.0.2.2:8080/gymTimeService/addToFavorites</string>
+    <string name="gym_favorite_url">http://10.0.2.2:8080/addToFavorites</string>
     <string name="gym_unfavorite_url">http://10.0.2.2:8080/gymTimeService/removeFromFavorites</string>
     <string name="user_getfavorites_url">http://10.0.2.2:8080/gymTimeService/getUserFavorites</string>
     <string name="title_activity_base">BaseActivity</string>

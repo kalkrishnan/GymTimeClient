@@ -54,8 +54,8 @@ public class OptionsButtonsFragment extends Fragment {
                     timerButton.setSelected(true);
                     DialogFragment timePickerFragment = new TimePickerFragment();
                     timePickerFragment.setArguments(bundle);
-                   // if (getChildFragmentManager().findFragmentByTag(timePickerFragment.getTag()) == null) {
-                        timePickerFragment.show(getChildFragmentManager(), timePickerFragment.getTag());
+                    // if (getChildFragmentManager().findFragmentByTag(timePickerFragment.getTag()) == null) {
+                    timePickerFragment.show(getChildFragmentManager(), timePickerFragment.getTag());
 
                     //}
                     v.setBackground(ResourcesCompat.getDrawable(getContext().getResources(), R.drawable.checkin_done, null));
@@ -77,7 +77,8 @@ public class OptionsButtonsFragment extends Fragment {
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     User updatedUser = new GsonBuilder().create().fromJson(sessionManager.getPreference(getContext(), Constants.USER.toString()), User.class);
-                    updateFavorites.addAll(updatedUser.getFavorites());
+                    if (updatedUser.getFavorites() != null)
+                        updateFavorites.addAll(updatedUser.getFavorites());
                     if (!gymFavoriteButton.isSelected()) {
                         gymFavoriteButton.setSelected(true);
                         updateFavorites.add(gym);
@@ -99,7 +100,7 @@ public class OptionsButtonsFragment extends Fragment {
                         }
                     }).execute
                             (new HashMap.SimpleEntry<String, String>("method", "POST"),
-                                    new HashMap.SimpleEntry<String, String>("url", getContext().getString(R.string.gym_signup_url)),
+                                    new HashMap.SimpleEntry<String, String>("url", getContext().getString(R.string.gym_favorite_url )),
                                     new HashMap.SimpleEntry<String, String>("user", userJson));
 
                 }

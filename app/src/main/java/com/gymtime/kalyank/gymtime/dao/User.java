@@ -1,5 +1,7 @@
 package com.gymtime.kalyank.gymtime.dao;
 
+import com.google.common.base.MoreObjects;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -74,5 +76,10 @@ public class User implements Serializable {
 
     public Set<Gym> getFavorites() {
         return favorites;
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this).toString();
     }
 }
